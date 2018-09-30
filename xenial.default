@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=ubuntu
+Release=xenial
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=xenial
+

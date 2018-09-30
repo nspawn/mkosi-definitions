@@ -1,0 +1,8 @@
+[Distribution]
+Distribution=arch
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=archlinux
+
