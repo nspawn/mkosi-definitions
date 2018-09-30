@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=ubuntu
+Release=bionic
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=bionic
+
