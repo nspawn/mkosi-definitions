@@ -4,6 +4,6 @@ Release=xenial
 
 [Output]
 Format=raw_gpt
-Bootable=yes
+Bootable=no
 Hostname=xenial
 
