@@ -1,0 +1,8 @@
+[Distribution]
+Distribution=fedora
+Release=29
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=fedora29
