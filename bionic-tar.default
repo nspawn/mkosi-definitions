@@ -6,4 +6,11 @@ Release=bionic
 Format=tar
 Bootable=no
 Hostname=bionic
+Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/bionic/bionic.tar.xz
+Xz=yes
+
+[Validation]
+Sign=yes
+Key=E7D0BA83
+Password=root
 

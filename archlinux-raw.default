@@ -5,9 +5,10 @@ Distribution=arch
 Format=raw_gpt
 Bootable=yes
 Hostname=archlinux
-Output=archlinux.raw.xz
-Force=yes
+Output=/usr/share/nginx/html/nspawn.org/public/storage/archlinux/archlinux/archlinux.raw.xz
 Xz=yes
 
 [Validation]
+Sign=yes
+Key=E7D0BA83
 Password=root

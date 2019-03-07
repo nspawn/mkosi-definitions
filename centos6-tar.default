@@ -6,4 +6,11 @@ Release=6
 Format=tar
 Bootable=no
 Hostname=centos6
+Output=/usr/share/nginx/html/nspawn.org/public/storage/centos/6/centos6.tar.xz
+Xz=yes
+
+[Validation]
+Sign=yes
+Key=E7D0BA83
+Password=root
 

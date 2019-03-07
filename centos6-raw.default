@@ -6,4 +6,10 @@ Release=6
 Format=raw_gpt
 Bootable=yes
 Hostname=centos6
+Output=/usr/share/nginx/html/nspawn.org/public/storage/centos/6/centos6.raw.xz
+Xz=yes
 
+[Validation]
+Sign=yes
+Key=E7D0BA83
+Password=root

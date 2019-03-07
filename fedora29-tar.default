@@ -6,10 +6,11 @@ Release=29
 Format=tar
 Bootable=no
 Hostname=fedora29
-Output=fedora29.tar.xz
-Force=yes
+Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/29/fedora29.tar.xz
 Xz=yes
 
 [Validation]
+Sign=yes
+Key=E7D0BA83
 Password=root
 

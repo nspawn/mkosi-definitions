@@ -5,9 +5,10 @@ Distribution=arch
 Format=tar
 Bootable=no
 Hostname=archlinux
-Output=archlinux.tar.xz
-Force=yes
+Output=/usr/share/nginx/html/nspawn.org/public/storage/archlinux/archlinux/archlinux.tar.xz
 Xz=yes
 
 [Validation]
+Sign=yes
+Key=E7D0BA83
 Password=root
