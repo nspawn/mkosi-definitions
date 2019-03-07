@@ -5,4 +5,9 @@ Distribution=arch
 Format=raw_gpt
 Bootable=yes
 Hostname=archlinux
+Output=archlinux.raw.xz
+Force=yes
+Xz=yes
 
+[Validation]
+Password=root

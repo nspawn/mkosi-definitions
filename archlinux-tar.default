@@ -5,4 +5,9 @@ Distribution=arch
 Format=tar
 Bootable=no
 Hostname=archlinux
+Output=archlinux.tar.xz
+Force=yes
+Xz=yes
 
+[Validation]
+Password=root

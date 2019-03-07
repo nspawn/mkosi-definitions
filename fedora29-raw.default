@@ -6,3 +6,9 @@ Release=29
 Format=raw_gpt
 Bootable=yes
 Hostname=fedora29
+Output=fedora29.raw.xz
+Force=yes
+Xz=yes
+
+[Validation]
+Password=root
