@@ -4,6 +4,6 @@ Release=7
 
 [Output]
 Format=tar
-Bootable=yes
+Bootable=no
 Hostname=centos7
 
