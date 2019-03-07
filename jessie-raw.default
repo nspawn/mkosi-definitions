@@ -6,4 +6,11 @@ Release=jessie
 Format=raw_gpt
 Bootable=no
 Hostname=jessie
+Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/jessie/jessie.raw.xz
+Xz=yes
+
+[Validation]
+Sign=yes
+Key=E7D0BA83
+Password=root
 

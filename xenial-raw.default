@@ -6,4 +6,12 @@ Release=xenial
 Format=raw_gpt
 Bootable=no
 Hostname=xenial
+Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/xenial/xenial.raw.xz
+Xz=yes
+
+[Validation]
+Sign=yes
+Key=E7D0BA83
+Password=root
+
 

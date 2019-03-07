@@ -6,4 +6,11 @@ Release=stretch
 Format=tar
 Bootable=no
 Hostname=stretch
+Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/stretch/stretch.tar.xz
+Xz=yes
+
+[Validation]
+Sign=yes
+Key=E7D0BA83
+Password=root
 
