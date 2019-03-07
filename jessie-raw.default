@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=debian
+Release=jessie
+
+[Output]
+Format=raw_gpt
+Bootable=no
+Hostname=jessie
+

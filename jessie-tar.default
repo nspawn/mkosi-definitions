@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=debian
+Release=jessie
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=jessie
+

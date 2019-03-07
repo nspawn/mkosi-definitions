@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=debian
+Release=stretch
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=stretch
+

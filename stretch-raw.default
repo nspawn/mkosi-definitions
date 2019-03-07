@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=debian
+Release=stretch
+
+[Output]
+Format=raw_gpt
+Bootable=no
+Hostname=stretch
+
