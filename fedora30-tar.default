@@ -1,8 +1,8 @@
 [Distribution]
 Distribution=fedora
-Release=27
+Release=30
 
 [Output]
-Format=raw_gpt
+Format=tar
 Bootable=yes
-Hostname=fedora27
+Hostname=fedora30

@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=centos
+Release=6
+
+[Output]
+Format=tar
+Bootable=yes
+Hostname=centos6
+

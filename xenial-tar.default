@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=ubuntu
+Release=xenial
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=xenial
+

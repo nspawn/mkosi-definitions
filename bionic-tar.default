@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=ubuntu
+Release=bionic
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=bionic
+

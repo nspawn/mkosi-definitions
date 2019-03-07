@@ -1,0 +1,8 @@
+[Distribution]
+Distribution=fedora
+Release=29
+
+[Output]
+Format=tar
+Bootable=yes
+Hostname=fedora29

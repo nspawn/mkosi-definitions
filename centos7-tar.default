@@ -1,0 +1,9 @@
+[Distribution]
+Distribution=centos
+Release=7
+
+[Output]
+Format=tar
+Bootable=yes
+Hostname=centos7
+

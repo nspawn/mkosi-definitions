@@ -1,0 +1,8 @@
+[Distribution]
+Distribution=arch
+
+[Output]
+Format=tar
+Bootable=yes
+Hostname=archlinux
+
