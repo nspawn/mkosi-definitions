@@ -5,7 +5,7 @@ Distribution=arch
 Format=raw_gpt
 Bootable=yes
 Hostname=archlinux
-Output=/usr/share/nginx/html/nspawn.org/public/storage/archlinux/archlinux/archlinux.raw.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/archlinux/archlinux/raw/archlinux.raw.xz
 Xz=yes
 
 [Validation]

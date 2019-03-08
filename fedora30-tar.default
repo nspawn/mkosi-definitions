@@ -6,7 +6,7 @@ Release=30
 Format=tar
 Bootable=no
 Hostname=fedora30
-Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/30/fedora30.tar.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/30/tar/fedora30.tar.xz
 Xz=yes
 
 [Validation]

@@ -6,7 +6,7 @@ Release=28
 Format=raw_gpt
 Bootable=yes
 Hostname=fedora28
-Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/28/fedora28.raw.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/28/raw/fedora28.raw.xz
 Xz=yes
 
 [Validation]

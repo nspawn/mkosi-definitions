@@ -6,7 +6,7 @@ Release=jessie
 Format=tar
 Bootable=no
 Hostname=jessie
-Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/jessie/jessie.tar.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/jessie/tar/jessie.tar.xz
 Xz=yes
 
 [Validation]

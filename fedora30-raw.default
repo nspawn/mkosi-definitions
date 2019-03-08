@@ -6,7 +6,7 @@ Release=30
 Format=raw_gpt
 Bootable=yes
 Hostname=fedora30
-Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/30/fedora30.raw.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/30/raw/fedora30.raw.xz
 Xz=yes
 
 [Validation]

@@ -6,7 +6,7 @@ Release=jessie
 Format=raw_gpt
 Bootable=no
 Hostname=jessie
-Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/jessie/jessie.raw.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/jessie/raw/jessie.raw.xz
 Xz=yes
 
 [Validation]
