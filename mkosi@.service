@@ -4,7 +4,6 @@ Description=mkosi for %I
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/mkosi --sign --key 575DE88794A45D84456D8897A232A512E7D0 BA83 --xz --default %i -O /usr/share/nginx/html/nspawn.org/static/storage/%i
-
+ExecStart=/usr/bin/mkosi --default %i
 [Install]
 WantedBy=multi-user.target
