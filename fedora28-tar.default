@@ -6,7 +6,7 @@ Release=28
 Format=tar
 Bootable=no
 Hostname=fedora28
-Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/28/fedora28.raw.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/28/tar/fedora28.tar.xz
 Xz=yes
 
 [Validation]
