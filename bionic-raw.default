@@ -6,7 +6,7 @@ Release=bionic
 Format=raw_gpt
 Bootable=no
 Hostname=bionic
-Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/bionic/raw/bionic.raw.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/bionic/raw/image.raw.xz
 Xz=yes
 
 [Validation]

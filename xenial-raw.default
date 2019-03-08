@@ -6,7 +6,7 @@ Release=xenial
 Format=raw_gpt
 Bootable=no
 Hostname=xenial
-Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/xenial/raw/xenial.raw.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/xenial/raw/image.raw.xz
 Xz=yes
 
 [Validation]

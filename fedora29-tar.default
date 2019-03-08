@@ -6,7 +6,7 @@ Release=29
 Format=tar
 Bootable=no
 Hostname=fedora29
-Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/29/tar/fedora29.tar.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/fedora/29/tar/image.tar.xz
 Xz=yes
 
 [Validation]

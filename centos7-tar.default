@@ -6,7 +6,7 @@ Release=7
 Format=tar
 Bootable=no
 Hostname=centos7
-Output=/usr/share/nginx/html/nspawn.org/public/storage/centos/7/tar/centos7.tar.xz
+Output=/usr/share/nginx/html/nspawn.org/public/storage/centos/7/tar/image.tar.xz
 Xz=yes
 
 [Validation]
