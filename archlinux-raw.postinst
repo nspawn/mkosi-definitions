@@ -1,0 +1,5 @@
+#!/bin/sh
+# Add pts/0 to /etc/securetty to allow logins via `machinectl login`
+echo "pts/0" >> /etc/securetty
+# Initialize mirrors
+sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
