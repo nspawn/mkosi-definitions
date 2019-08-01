@@ -7,3 +7,5 @@ systemctl enable systemd-resolved
 ln -sf /usr/lib/systemd/resolv.conf /etc/resolv.conf
 # unlock root account
 passwd -u root
+# set pts/0 in /etc/securetty
+echo "pts/0" >> /etc/securetty
