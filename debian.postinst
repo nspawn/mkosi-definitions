@@ -4,4 +4,4 @@ systemctl enable systemd-networkd
 systemctl enable systemd-resolved
 # make sure we symlink /usr/lib/systemd/resolv.conf to /etc/resolv.conf
 # otherwise curl will fail
-ln -s /usr/lib/systemd/resolv.conf /etc/resolv.conf
+ln -sf /usr/lib/systemd/resolv.conf /etc/resolv.conf
