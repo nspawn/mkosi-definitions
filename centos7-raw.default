@@ -17,3 +17,4 @@ Password=root
 [Packages]
 Packages=
 	yum
+	systemd-networkd
