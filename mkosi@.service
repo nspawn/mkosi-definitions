@@ -4,6 +4,6 @@ Description=mkosi for %I
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/mkosi --default %i
+ExecStart=/usr/bin/mkosi --default %i --force --postinst-script %i
 [Install]
 WantedBy=multi-user.target
