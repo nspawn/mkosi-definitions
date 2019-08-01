@@ -1,0 +1,4 @@
+#!/bin/sh
+# make sure systemd-networkd and systemd-resolved are running
+systemctl enable systemd-networkd
+systemctl enable systemd-resolved
