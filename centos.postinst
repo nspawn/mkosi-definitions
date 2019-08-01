@@ -2,10 +2,6 @@
 # make sure systemd-networkd and systemd-resolved are running
 systemctl enable systemd-networkd
 systemctl enable systemd-resolved
-# We need to actually start systemd-networkd and systemd-resolved
-# otherwise our symlink will fail
-systemctl start systemd-networkd
-systemctl start systemd-resolved
 # make sure we symlink /usr/lib/systemd/resolv.conf to /etc/resolv.conf
 # otherwise curl will fail
 ln -s /usr/lib/systemd/resolv.conf /etc/resolv.conf
