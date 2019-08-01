@@ -13,3 +13,7 @@ Xz=yes
 Sign=yes
 Key=575DE88794A45D84456D8897A232A512E7D0BA83
 Password=root
+
+[Packages]
+Packages=
+	yum
