@@ -1,3 +1,3 @@
 #!/bin/bash
 
-find /usr/share/nginx/html/nspawn.org/public/storage/ -iname "mkosi-*" -exec "rm -rf {}" \+
+find /usr/share/nginx/html/nspawn.org/public/storage/ -iname "mkosi-*" -print -exec rm -rf {} \+
