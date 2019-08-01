@@ -10,4 +10,4 @@ systemctl start systemd-resolved
 # otherwise curl will fail
 ln -s /usr/lib/systemd/resolv.conf /etc/resolv.conf
 # we need to enable logins via pts/0 in /etc/securetty
-cat "pts/0" >> /etc/securetty
+echo "pts/0" >> /etc/securetty
