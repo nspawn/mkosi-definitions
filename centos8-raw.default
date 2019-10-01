@@ -1,0 +1,20 @@
+[Distribution]
+Distribution=centos
+Release=8
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=centos8
+Output=/usr/share/nginx/html/nspawn.org/public/storage/centos/8/raw/image.raw.xz
+Xz=yes
+
+[Validation]
+Sign=yes
+Key=575DE88794A45D84456D8897A232A512E7D0BA83
+Password=root
+
+[Packages]
+Packages=
+	yum
+	systemd-networkd
