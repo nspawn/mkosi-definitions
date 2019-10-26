@@ -7,5 +7,11 @@ systemctl enable systemd-resolved
 ln -sf /usr/lib/systemd/resolv.conf /etc/resolv.conf
 # unlock root account
 passwd -u root
-# set pts/0 in /etc/securetty
-echo "pts/0" >> /etc/securetty
+# Add pts/[0-4] to /etc/securetty to allow logins via `machinectl login`
+{
+  echo "pts/0"
+  echo "pts/1"
+  echo "pts/2"
+  echo "pts/3"
+  echo "pts/4"
+} >> /etc/securetty

@@ -5,5 +5,11 @@ systemctl enable systemd-resolved
 # make sure we symlink /usr/lib/systemd/resolv.conf to /etc/resolv.conf
 # otherwise curl will fail
 ln -s /usr/lib/systemd/resolv.conf /etc/resolv.conf
-# we need to enable logins via pts/0 in /etc/securetty
-echo "pts/0" >> /etc/securetty
+# Add pts/[0-4] to /etc/securetty to allow logins via `machinectl login`
+{
+  echo "pts/0"
+  echo "pts/1"
+  echo "pts/2"
+  echo "pts/3"
+  echo "pts/4"
+} >> /etc/securetty
