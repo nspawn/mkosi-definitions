@@ -7,7 +7,7 @@ Format=tar
 Bootable=no
 Hostname=stretch
 Output=/srv/www/nspawn.org/public/storage/debian/stretch/tar/image.tar.xz
-Xz=yes
+XZ=yes
 
 [Validation]
 Sign=yes

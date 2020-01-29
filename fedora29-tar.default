@@ -7,7 +7,7 @@ Format=tar
 Bootable=no
 Hostname=fedora29
 Output=/srv/www/nspawn.org/public/storage/fedora/29/tar/image.tar.xz
-Xz=yes
+XZ=yes
 
 [Validation]
 Sign=yes
