@@ -7,7 +7,7 @@ Format=raw_gpt
 Bootable=no
 Hostname=bionic
 Output=/srv/www/nspawn.org/public/storage/ubuntu/bionic/raw/image.raw.xz
-Xz=yes
+XZ=yes
 
 [Validation]
 Sign=yes
