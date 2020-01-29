@@ -6,7 +6,7 @@ Release=buster
 Format=tar
 Bootable=no
 Hostname=buster
-Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/buster/tar/image.tar.xz
+Output=/srv/www/nspawn.org/public/storage/debian/buster/tar/image.tar.xz
 Xz=yes
 
 [Validation]

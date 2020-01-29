@@ -6,7 +6,7 @@ Release=bionic
 Format=tar
 Bootable=no
 Hostname=bionic
-Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/bionic/tar/image.tar.xz
+Output=/srv/www/nspawn.org/public/storage/ubuntu/bionic/tar/image.tar.xz
 Xz=yes
 
 [Validation]
