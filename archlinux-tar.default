@@ -5,7 +5,7 @@ Distribution=arch
 Format=tar
 Bootable=no
 Hostname=archlinux
-Output=/usr/share/nginx/html/nspawn.org/public/storage/archlinux/archlinux/tar/image.tar.xz
+Output=/srv/www/nspawn.org/public/storage/archlinux/archlinux/tar/image.tar.xz
 Xz=yes
 
 [Validation]

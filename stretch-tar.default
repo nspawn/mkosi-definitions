@@ -6,7 +6,7 @@ Release=stretch
 Format=tar
 Bootable=no
 Hostname=stretch
-Output=/usr/share/nginx/html/nspawn.org/public/storage/debian/stretch/tar/image.tar.xz
+Output=/srv/www/nspawn.org/public/storage/debian/stretch/tar/image.tar.xz
 Xz=yes
 
 [Validation]

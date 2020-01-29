@@ -6,7 +6,7 @@ Release=xenial
 Format=tar
 Bootable=no
 Hostname=xenial
-Output=/usr/share/nginx/html/nspawn.org/public/storage/ubuntu/xenial/tar/image.tar.xz
+Output=/srv/www/nspawn.org/public/storage/ubuntu/xenial/tar/image.tar.xz
 Xz=yes
 
 [Validation]
