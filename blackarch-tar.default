@@ -1,0 +1,14 @@
+[Distribution]
+Distribution=arch
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=blackarch
+Output=/srv/www/nspawn.org/public/storage/blackarch/blackarch/tar/image.tar.xz
+XZ=yes
+
+[Validation]
+Sign=yes
+Key=575DE88794A45D84456D8897A232A512E7D0BA83
+Password=root
