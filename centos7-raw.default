@@ -16,5 +16,9 @@ Password=root
 
 [Packages]
 Packages=
-	yum
-	systemd-networkd
+  yum
+  systemd-networkd
+  iproute
+  iputils
+PostInstallationScript=centos7.postinst
+NSpawnSettings=centos7.nspawn

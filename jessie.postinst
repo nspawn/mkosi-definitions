@@ -1,0 +1,9 @@
+#!/bin/sh
+# make sure systemd-networkd and systemd-resolved are running
+systemctl enable systemd-networkd
+systemctl enable systemd-resolved
+# make sure we symlink /run/systemd/resolve/stub-resolv.conf to /etc/resolv.conf
+# otherwise curl will fail
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+# Add DNS entry to resolved
+echo "DNS=8.8.8.8" >> /etc/systemd/resolved.conf

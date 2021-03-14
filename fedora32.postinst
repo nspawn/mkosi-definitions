@@ -1,0 +1,7 @@
+#!/bin/sh
+# make sure systemd-networkd and systemd-resolved are running
+systemctl enable systemd-networkd
+systemctl enable systemd-resolved
+# make sure we symlink /run/systemd/resolve/stub-resolv.conf to /etc/resolv.conf
+# otherwise curl will fail
+ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf

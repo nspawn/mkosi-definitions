@@ -1,12 +1,12 @@
 [Distribution]
-Distribution=debian
-Release=buster
+Distribution=ubuntu
+Release=focal
 
 [Output]
 Format=raw_gpt
 Bootable=yes
-Hostname=buster
-Output=/srv/www/nspawn.org/public/storage/debian/buster/raw/image.raw.xz
+Hostname=focal
+Output=/srv/www/nspawn.org/public/storage/ubuntu/focal/raw/image.raw.xz
 XZ=yes
 
 [Validation]
@@ -18,4 +18,4 @@ Password=root
 Packages=
   iproute2
   iputils-ping
-PostInstallationScript=buster.postinst
+PostInstallationScript=focal.postinst

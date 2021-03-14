@@ -2,9 +2,11 @@
 # make sure systemd-networkd and systemd-resolved are running
 systemctl enable systemd-networkd
 systemctl enable systemd-resolved
-# make sure we symlink /usr/lib/systemd/resolv.conf to /etc/resolv.conf
+# make sure we symlink /run/systemd/resolve/stub-resolv.conf to /etc/resolv.conf
 # otherwise curl will fail
-ln -s /usr/lib/systemd/resolv.conf /etc/resolv.conf
+ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+# unlock root account
+passwd -u root
 # Add pts/[0-4] to /etc/securetty to allow logins via `machinectl login`
 {
   echo "pts/0"
