@@ -16,4 +16,7 @@ Password=root
 
 [Packages]
 Packages=
-	iputils-ping
+  iproute2
+  iputils-ping
+PostInstallationScript=jessie.postinst
+NSpawnSettings=jessie.nspawn

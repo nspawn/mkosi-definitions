@@ -3,10 +3,10 @@ Distribution=fedora
 Release=31
 
 [Output]
-Format=tar
-Bootable=no
+Format=raw_gpt
+Bootable=yes
 Hostname=fedora31
-Output=/srv/www/nspawn.org/public/storage/fedora/31/tar/image.tar.xz
+Output=/srv/www/nspawn.org/public/storage/fedora/31/raw/image.raw.xz
 XZ=yes
 
 [Validation]

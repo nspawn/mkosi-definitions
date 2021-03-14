@@ -16,5 +16,7 @@ Password=root
 
 [Packages]
 Packages=
-	dnf
-	iputils
+  dnf
+  iputils
+  iproute
+PostInstallationScript=fedora32.postinst

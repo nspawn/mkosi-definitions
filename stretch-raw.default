@@ -4,7 +4,7 @@ Release=stretch
 
 [Output]
 Format=raw_gpt
-Bootable=no
+Bootable=yes
 Hostname=stretch
 Output=/srv/www/nspawn.org/public/storage/debian/stretch/raw/image.raw.xz
 XZ=yes
@@ -16,4 +16,6 @@ Password=root
 
 [Packages]
 Packages=
-	iputils-ping
+  iproute2
+  iputils-ping
+PostInstallationScript=stretch.postinst

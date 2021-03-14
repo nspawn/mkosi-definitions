@@ -1,9 +1,10 @@
 [Unit]
-Description=mkosi for %I
+Description=mkosi images builder for %I
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/mkosi --default %i --force --postinst-script %i
+ExecStart=/usr/bin/nspawn-builder -n %i
+
 [Install]
 WantedBy=multi-user.target

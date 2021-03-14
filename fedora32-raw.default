@@ -1,12 +1,12 @@
 [Distribution]
 Distribution=fedora
-Release=31
+Release=32
 
 [Output]
-Format=tar
-Bootable=no
-Hostname=fedora31
-Output=/srv/www/nspawn.org/public/storage/fedora/31/tar/image.tar.xz
+Format=raw_gpt
+Bootable=yes
+Hostname=fedora32
+Output=/srv/www/nspawn.org/public/storage/fedora/32/raw/image.raw.xz
 XZ=yes
 
 [Validation]
@@ -19,4 +19,4 @@ Packages=
   dnf
   iputils
   iproute
-PostInstallationScript=fedora31.postinst
+PostInstallationScript=fedora32.postinst

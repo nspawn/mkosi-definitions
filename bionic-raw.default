@@ -4,7 +4,7 @@ Release=bionic
 
 [Output]
 Format=raw_gpt
-Bootable=no
+Bootable=yes
 Hostname=bionic
 Output=/srv/www/nspawn.org/public/storage/ubuntu/bionic/raw/image.raw.xz
 XZ=yes
@@ -14,4 +14,8 @@ Sign=yes
 Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
 Password=root
 
-
+[Packages]
+Packages=
+  iproute2
+  iputils-ping
+PostInstallationScript=bionic.postinst
