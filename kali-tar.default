@@ -1,0 +1,22 @@
+[Distribution]
+Distribution=debian
+Release=kali-rolling
+Mirror=http://http.kali.org/kali
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=kali-rolling
+Output=/srv/www/nspawn.org/public/storage/kali/rolling/tar/image.tar.xz
+XZ=yes
+
+[Validation]
+Sign=yes
+Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
+Password=root
+
+[Packages]
+Packages=
+  iproute2
+  iputils-ping
+PostInstallationScript=kali.postinst

@@ -1,0 +1,23 @@
+[Distribution]
+Distribution=opensuse
+Release=tumbleweed
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=opensusetumbleweed
+Output=/srv/www/nspawn.org/public/storage/opensuse/tumbleweed/raw/image.raw.xz
+XZ=yes
+
+[Validation]
+Sign=yes
+Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
+Password=root
+
+[Packages]
+Packages=
+  zypper
+  iputils
+  iproute2
+PostInstallationScript=opensusetumbleweed.postinst
+NSpawnSettings=opensusetumbleweed.nspawn
