@@ -16,3 +16,7 @@ ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 # Tune .bashrc
 cp /etc/skel/.bashrc /root
 cp /etc/skel/.bash_profile /root
+
+# Use the BlackArch os-release
+ln -sf /etc/os-release /usr/lib/os-release
+echo -e "[options]\nNoExtract  = usr/lib/os-release" >> /etc/pacman.conf
