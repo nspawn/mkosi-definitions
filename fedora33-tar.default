@@ -19,4 +19,5 @@ Packages=
   dnf
   iputils
   iproute
+  systemd-networkd
 PostInstallationScript=fedora33.postinst
