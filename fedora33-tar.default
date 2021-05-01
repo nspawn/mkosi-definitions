@@ -20,4 +20,5 @@ Packages=
   iputils
   iproute
   systemd-networkd
+  fedora-release
 PostInstallationScript=fedora33.postinst
