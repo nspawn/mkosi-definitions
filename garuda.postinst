@@ -14,8 +14,9 @@ ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
   echo "pts/4"
 } >> /etc/securetty
 # Tune .bashrc
-cp /etc/skel/.bashrc /root
+#cp /etc/skel/.bashrc /root
 cp /etc/skel/.bash_profile /root
 
 # Use the Garuda Linux os-release
+ln -sf /etc/os-release /usr/lib/os-release
 echo -e "[options]\nNoExtract  = usr/lib/os-release" >> /etc/pacman.conf

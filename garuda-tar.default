@@ -19,5 +19,8 @@ Packages=
   lsb-release
   wget
   cronie
+  starship
+  bash-completion
 PostInstallationScript=garuda.postinst
 PrepareScript=garuda.prepare
+ExtraTrees=garuda.extra

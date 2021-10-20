@@ -13,4 +13,4 @@ curl -O https://blackarch.org/strap.sh && echo $SHA512SUM" strap.sh" | sha512sum
 echo -e "[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
 
 # Install some Garuda-specific packages
-pacman -Syu --needed --noconfirm python-apprise garuda-tools-iso-git garuda-hooks
+pacman -Syu --needed --noconfirm find-the-command garuda-hooks
