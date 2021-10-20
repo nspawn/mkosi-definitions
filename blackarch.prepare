@@ -4,7 +4,7 @@ sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
 # Enable multilib
 sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf && sed -i '/\[multilib\]/!b;n;cInclude = /etc/pacman.d/mirrorlist' /etc/pacman.conf
 # Initialize BlackArch Keyring
-SHA512SUM='f2d5342610f09723bd7dbb8178002dc7e9f18348b9d241a39238dcf9127104ba133fe6931b829a96ba77ab21e6dfefce8cd30ed52d211a86cea12cccc1336b35'
+SHA512SUM='c8c787cf013ebd74ed036d365f5ca81a60132620e169ca05bbf82930cd8444cb554aaec17fdb9d107b024d2d54ab7c00c398de9f63009beffdd69675a5954f37'
 curl -O https://blackarch.org/strap.sh && echo $SHA512SUM" strap.sh" | sha512sum -c - && bash strap.sh && rm strap.sh
 # Delete ArchLinux release files
 rm -f /etc/*-release
