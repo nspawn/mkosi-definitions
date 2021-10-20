@@ -12,3 +12,8 @@ XZ=yes
 Sign=yes
 Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
 Password=root
+
+[Packages]
+PostInstallationScript=blackarch.postinst
+PrepareScript=blackarch.prepare
+ExtraTrees=blackarch.extra
