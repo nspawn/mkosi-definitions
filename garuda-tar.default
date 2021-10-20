@@ -1,0 +1,23 @@
+[Distribution]
+Distribution=arch
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=garuda
+Output=/srv/www/nspawn.org/public/storage/garuda/garuda/tar/image.tar.xz
+XZ=yes
+
+[Validation]
+Sign=yes
+Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
+Password=root
+
+[Packages]
+Packages=
+  btrfs-progs
+  lsb-release
+  wget
+  cronie
+PostInstallationScript=garuda.postinst
+PrepareScript=garuda.prepare
