@@ -5,13 +5,13 @@ Distribution=arch
 Format=tar
 Bootable=no
 Hostname=archlinux
-Output=/srv/www/nspawn.org/public/storage/archlinux/archlinux/tar/image.tar.xz
-XZ=yes
+Output=/srv/www/nspawn.org/public/storage/archlinux/archlinux/tar/image.tar.zstd
+CompressOutput=zstd
 
 [Validation]
 Sign=yes
 Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
 Password=root
 
-[Packages]
+[Content]
 PostInstallationScript=archlinux.postinst

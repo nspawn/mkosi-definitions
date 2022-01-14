@@ -6,15 +6,15 @@ Release=28
 Format=raw_gpt
 Bootable=yes
 Hostname=fedora28
-Output=/srv/www/nspawn.org/public/storage/fedora/28/raw/image.raw.xz
-XZ=yes
+Output=/srv/www/nspawn.org/public/storage/fedora/28/raw/image.raw.zstd
+CompressOutput=zstd
 
 [Validation]
 Sign=yes
 Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
 Password=root
 
-[Packages]
+[Content]
 Packages=
   dnf
   iputils

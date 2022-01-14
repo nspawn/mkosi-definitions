@@ -5,15 +5,15 @@ Distribution=arch
 Format=tar
 Bootable=no
 Hostname=blackarch
-Output=/srv/www/nspawn.org/public/storage/blackarch/blackarch/tar/image.tar.xz
-XZ=yes
+Output=/srv/www/nspawn.org/public/storage/blackarch/blackarch/tar/image.tar.zstd
+CompressOutput=zstd
 
 [Validation]
 Sign=yes
 Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
 Password=root
 
-[Packages]
+[Content]
 PostInstallationScript=blackarch.postinst
 PrepareScript=blackarch.prepare
 ExtraTrees=blackarch.extra

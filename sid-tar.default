@@ -6,15 +6,15 @@ Release=sid
 Format=tar
 Bootable=no
 Hostname=sid
-Output=/srv/www/nspawn.org/public/storage/debian/sid/tar/image.tar.xz
-XZ=yes
+Output=/srv/www/nspawn.org/public/storage/debian/sid/tar/image.tar.zstd
+CompressOutput=zstd
 
 [Validation]
 Sign=yes
 Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
 Password=root
 
-[Packages]
+[Content]
 Packages=
   iproute2
   iputils-ping

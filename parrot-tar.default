@@ -11,15 +11,15 @@ Mirror=https://deb.parrot.sh/parrot
 Format=tar
 Bootable=no
 Hostname=parrot
-Output=/srv/www/nspawn.org/public/storage/parrot/rolling/tar/image.tar.xz
-XZ=yes
+Output=/srv/www/nspawn.org/public/storage/parrot/rolling/tar/image.tar.zstd
+CompressOutput=zstd
 
 [Validation]
 Sign=yes
 Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
 Password=root
 
-[Packages]
+[Content]
 Packages=
   iproute2
   iputils-ping
