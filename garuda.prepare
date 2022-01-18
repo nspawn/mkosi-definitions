@@ -6,7 +6,7 @@ sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf && sed -i '/\[multilib\]/
 # Initialize Garuda Linux/BlackArch Keyring
 pacman-key --init && pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com && pacman-key --lsign-key FBA220DFC880C036 && pacman --noconfirm -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-'{keyring,mirrorlist}'.pkg.tar.zst'
 
-SHA512SUM='c8c787cf013ebd74ed036d365f5ca81a60132620e169ca05bbf82930cd8444cb554aaec17fdb9d107b024d2d54ab7c00c398de9f63009beffdd69675a5954f37'
+SHA512SUM='6a0b081a14b01b14917e525d2cce8a7a54465c8492e3404bef6752c50a5000b7387e98ff2606e49618ce493dcc3b6fca082a1479bc4b2e6609e4dc8db4470eee'
 curl -O https://blackarch.org/strap.sh && echo $SHA512SUM" strap.sh" | sha512sum -c - && bash strap.sh && rm strap.sh
 
 # Enable Chaotic AUR repo
