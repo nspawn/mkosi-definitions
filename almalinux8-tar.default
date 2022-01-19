@@ -20,5 +20,5 @@ Packages=
   NetworkManager
   iproute
   iputils
-PostInstallationScript=almalinux8.postinst
-NSpawnSettings=almalinux8.nspawn
+PostInstallationScript=almalinux.postinst
+NSpawnSettings=almalinux.nspawn

@@ -1,5 +1,5 @@
 [Distribution]
-Distribution=centos
+Distribution=centos_epel
 Release=8
 
 [Output]

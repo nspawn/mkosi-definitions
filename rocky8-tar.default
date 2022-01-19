@@ -1,5 +1,5 @@
 [Distribution]
-Distribution=rocky
+Distribution=rocky_epel
 Release=8
 
 [Output]
@@ -20,5 +20,5 @@ Packages=
   NetworkManager
   iproute
   iputils
-PostInstallationScript=rocky8.postinst
-NSpawnSettings=rocky8.nspawn
+PostInstallationScript=rocky.postinst
+NSpawnSettings=rocky.nspawn
