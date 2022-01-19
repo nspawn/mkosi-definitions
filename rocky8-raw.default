@@ -1,0 +1,24 @@
+[Distribution]
+Distribution=rocky
+Release=8
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=rocky8
+Output=/srv/www/nspawn.org/public/storage/rocky/8/raw/image.raw.zstd
+CompressOutput=zstd
+
+[Validation]
+Sign=yes
+Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
+Password=root
+
+[Content]
+Packages=
+  yum
+  NetworkManager
+  iproute
+  iputils
+PostInstallationScript=rocky8.postinst
+NSpawnSettings=rocky8.nspawn
