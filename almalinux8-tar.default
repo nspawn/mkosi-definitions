@@ -1,0 +1,24 @@
+[Distribution]
+Distribution=alma_epel
+Release=8
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=almalinux8
+Output=/srv/www/nspawn.org/public/storage/almalinux/8/tar/image.tar.zstd
+CompressOutput=zstd
+
+[Validation]
+Sign=yes
+Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
+Password=root
+
+[Content]
+Packages=
+  yum
+  NetworkManager
+  iproute
+  iputils
+PostInstallationScript=almalinux8.postinst
+NSpawnSettings=almalinux8.nspawn
