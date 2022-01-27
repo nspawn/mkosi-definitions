@@ -20,4 +20,4 @@ Packages=
   iputils
   iproute
   fedora-release
-PostInstallationScript=fedora28.postinst
+PostInstallationScript=fedora.postinst

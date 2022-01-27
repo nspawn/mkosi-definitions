@@ -21,4 +21,4 @@ Packages=
   iproute
   systemd-networkd
   fedora-release
-PostInstallationScript=fedora34.postinst
+PostInstallationScript=fedora.postinst
