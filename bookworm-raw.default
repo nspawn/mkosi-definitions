@@ -6,8 +6,8 @@ Release=bookworm
 Format=raw_gpt
 Bootable=yes
 Hostname=bookworm
-Output=/srv/www/nspawn.org/public/storage/debian/bookworm/raw/image.raw.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/debian/bookworm/raw/image.raw.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

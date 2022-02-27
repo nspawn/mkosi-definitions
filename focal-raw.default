@@ -6,8 +6,8 @@ Release=focal
 Format=raw_gpt
 Bootable=yes
 Hostname=focal
-Output=/srv/www/nspawn.org/public/storage/ubuntu/focal/raw/image.raw.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/ubuntu/focal/raw/image.raw.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

@@ -7,8 +7,8 @@ Mirror=http://http.kali.org/kali
 Format=raw_gpt
 Bootable=yes
 Hostname=kali-rollig
-Output=/srv/www/nspawn.org/public/storage/kali/rolling/raw/image.raw.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/kali/rolling/raw/image.raw.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

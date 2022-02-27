@@ -5,8 +5,8 @@ Distribution=arch
 Format=raw_gpt
 Bootable=yes
 Hostname=blackarch
-Output=/srv/www/nspawn.org/public/storage/blackarch/blackarch/raw/image.raw.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/blackarch/blackarch/raw/image.raw.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

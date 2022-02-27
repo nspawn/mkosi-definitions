@@ -6,8 +6,8 @@ Release=34
 Format=raw_gpt
 Bootable=yes
 Hostname=fedora34
-Output=/srv/www/nspawn.org/public/storage/fedora/34/raw/image.raw.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/fedora/34/raw/image.raw.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

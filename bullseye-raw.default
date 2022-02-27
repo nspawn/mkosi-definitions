@@ -6,8 +6,8 @@ Release=bullseye
 Format=raw_gpt
 Bootable=yes
 Hostname=bullseye
-Output=/srv/www/nspawn.org/public/storage/debian/bullseye/raw/image.raw.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/debian/bullseye/raw/image.raw.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

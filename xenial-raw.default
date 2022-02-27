@@ -6,8 +6,8 @@ Release=xenial
 Format=raw_gpt
 Bootable=no
 Hostname=xenial
-Output=/srv/www/nspawn.org/public/storage/ubuntu/xenial/raw/image.raw.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/ubuntu/xenial/raw/image.raw.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes
