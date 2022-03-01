@@ -1,0 +1,25 @@
+[Distribution]
+Distribution=centos_epel
+Release=8-stream
+
+[Output]
+Format=tar
+Bootable=no
+Hostname=centos8-stream
+Output=/srv/www/nspawn.org/public/storage/centos/8-stream/tar/image.tar.zstd
+CompressOutput=zstd
+
+[Validation]
+Sign=yes
+Key=E605F310C46032EBD9EDDDA09F9B61E3E4EF5957
+Password=root
+
+[Content]
+Packages=
+  yum
+  systemd-networkd
+  systemd-resolved
+  iproute
+  iputils
+PostInstallationScript=centos8-stream.postinst
+NSpawnSettings=centos8-stream.nspawn

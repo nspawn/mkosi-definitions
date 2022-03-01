@@ -1,6 +1,7 @@
 [Distribution]
-Distribution=centos_epel
+Distribution=centos
 Release=8
+Mirror=https://vault.centos.org/
 
 [Output]
 Format=tar
