@@ -6,8 +6,8 @@ Release=leap
 Format=tar
 Bootable=no
 Hostname=opensuseleap
-Output=/srv/www/nspawn.org/public/storage/opensuse/leap/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/opensuse/leap/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

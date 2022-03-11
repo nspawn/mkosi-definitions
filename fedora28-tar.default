@@ -6,8 +6,8 @@ Release=28
 Format=tar
 Bootable=no
 Hostname=fedora28
-Output=/srv/www/nspawn.org/public/storage/fedora/28/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/fedora/28/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

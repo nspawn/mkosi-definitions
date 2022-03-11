@@ -6,8 +6,8 @@ Release=8
 Format=tar
 Bootable=no
 Hostname=almalinux8
-Output=/srv/www/nspawn.org/public/storage/almalinux/8/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/almalinux/8/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

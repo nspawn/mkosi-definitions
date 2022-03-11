@@ -7,8 +7,8 @@ Mirror=http://http.kali.org/kali
 Format=tar
 Bootable=no
 Hostname=kali-rolling
-Output=/srv/www/nspawn.org/public/storage/kali/rolling/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/kali/rolling/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

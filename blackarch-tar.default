@@ -5,8 +5,8 @@ Distribution=arch
 Format=tar
 Bootable=no
 Hostname=blackarch
-Output=/srv/www/nspawn.org/public/storage/blackarch/blackarch/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/blackarch/blackarch/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

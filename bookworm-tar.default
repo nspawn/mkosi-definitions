@@ -6,8 +6,8 @@ Release=bookworm
 Format=tar
 Bootable=no
 Hostname=bookworm
-Output=/srv/www/nspawn.org/public/storage/debian/bookworm/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/debian/bookworm/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

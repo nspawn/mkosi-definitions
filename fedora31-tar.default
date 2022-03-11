@@ -6,8 +6,8 @@ Release=31
 Format=tar
 Bootable=no
 Hostname=fedora31
-Output=/srv/www/nspawn.org/public/storage/fedora/31/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/fedora/31/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

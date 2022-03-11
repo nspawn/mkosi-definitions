@@ -5,8 +5,8 @@ Distribution=arch
 Format=tar
 Bootable=no
 Hostname=archlinux
-Output=/srv/www/nspawn.org/public/storage/archlinux/archlinux/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/archlinux/archlinux/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

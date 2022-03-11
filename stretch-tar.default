@@ -6,8 +6,8 @@ Release=stretch
 Format=tar
 Bootable=no
 Hostname=stretch
-Output=/srv/www/nspawn.org/public/storage/debian/stretch/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/debian/stretch/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

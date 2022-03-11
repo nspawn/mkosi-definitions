@@ -7,8 +7,8 @@ Mirror=https://vault.centos.org/
 Format=tar
 Bootable=no
 Hostname=centos8
-Output=/srv/www/nspawn.org/public/storage/centos/8/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/centos/8/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

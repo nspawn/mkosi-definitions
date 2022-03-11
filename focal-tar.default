@@ -6,8 +6,8 @@ Release=focal
 Format=tar
 Bootable=no
 Hostname=focal
-Output=/srv/www/nspawn.org/public/storage/ubuntu/focal/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/ubuntu/focal/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

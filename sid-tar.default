@@ -6,8 +6,8 @@ Release=sid
 Format=tar
 Bootable=no
 Hostname=sid
-Output=/srv/www/nspawn.org/public/storage/debian/sid/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/debian/sid/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes

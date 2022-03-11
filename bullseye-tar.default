@@ -6,8 +6,8 @@ Release=bullseye
 Format=tar
 Bootable=no
 Hostname=bullseye
-Output=/srv/www/nspawn.org/public/storage/debian/bullseye/tar/image.tar.zstd
-CompressOutput=zstd
+Output=/srv/www/nspawn.org/public/storage/debian/bullseye/tar/image.tar.xz
+CompressOutput=xz
 
 [Validation]
 Sign=yes
