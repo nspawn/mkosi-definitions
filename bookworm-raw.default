@@ -18,4 +18,5 @@ Password=root
 Packages=
   iproute2
   iputils-ping
+  gnupg2
 PostInstallationScript=bookworm.postinst

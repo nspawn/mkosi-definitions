@@ -22,4 +22,5 @@ Packages=
   curl
   kali-defaults
   kali-archive-keyring
+  gnupg2
 PostInstallationScript=kali.postinst
