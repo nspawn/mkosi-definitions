@@ -24,8 +24,8 @@ jobs:
     steps:
 
       # Setup mkosi
-      - name: setup-mkosi
-        uses: systemd/mkosi@v12
+      # - name: setup-mkosi
+      #  uses: systemd/mkosi@v12
         
       - name: Change ownership of files
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
@@ -36,5 +36,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build the images
         run: |
+          ls -la
           chmod +x ./buid.sh ./nspawn-builder
           ./build.sh
