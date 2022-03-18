@@ -22,18 +22,19 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
-      # Setup mkosi
-      - name: setup-mkosi
-        uses: systemd/mkosi@v12
-      
+    
       # Configure GPG
       - name: Configure GPG Key
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         run: |
-          echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
+          echo -n "$GPG_SIGNING_KEY" | base64 --decode | sudo gpg --import
+
+      # Setup mkosi
+      - name: setup-mkosi
+        uses: systemd/mkosi@v12
         
+      # Configure our custom builder
       - name: Put the nspawn-builder binary in path
         run: |
           sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
