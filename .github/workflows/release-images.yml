@@ -24,8 +24,8 @@ jobs:
     steps:
 
       # Setup mkosi
-      # - name: setup-mkosi
-      #  uses: systemd/mkosi@v12
+      - name: setup-mkosi
+        uses: systemd/mkosi@v12
         
       - name: Put the nspawn-builder binary in path
         run: |
