@@ -22,9 +22,15 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Prepare our custom builder
+      - name: Prepare our builder
+        run: |
+          sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
+          sudo chmod +x /usr/bin/nspawn-builder
+          sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
     
       # Configure GPG
-      - name: Configure GPG Key
+      - name: Configure the GPG Key
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         run: |
@@ -32,16 +38,9 @@ jobs:
 
       # Setup mkosi
       - name: setup-mkosi
-        uses: systemd/mkosi@v12
+        uses: systemd/mkosi@v12        
         
-      # Configure our custom builder
-      - name: Put the nspawn-builder binary in path
-        run: |
-          sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
-          sudo chmod +x /usr/bin/nspawn-builder
-        
-        
-      - name: Change ownership of files
+      - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
