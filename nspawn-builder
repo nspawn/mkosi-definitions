@@ -95,13 +95,6 @@ if [[ $# -eq 0 ]]; then
   exit
 fi
 
-check_root() {
-  if [[ $EUID -ne 0 ]]; then
-    echo "This script requires root privileges to work, leaving."
-    exit 1
-  fi
-}
-
 build_image() {
   check_mkosi
   check_root
