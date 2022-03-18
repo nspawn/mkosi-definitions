@@ -26,6 +26,9 @@ jobs:
       # Setup mkosi
       - name: setup-mkosi
         uses: systemd/mkosi@v12
+        
+      - name: Change ownership of files
+        run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -34,4 +37,4 @@ jobs:
       - name: Build the images
         run: |
           chmod +x ./buid.sh ./nspawn-builder
-          ./ build.sh
+          ./build.sh
