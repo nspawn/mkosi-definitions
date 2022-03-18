@@ -26,6 +26,13 @@ jobs:
       # Setup mkosi
       - name: setup-mkosi
         uses: systemd/mkosi@v12
+      
+      # Configure GPG
+      - name: Configure GPG Key
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        run: |
+          echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
         
       - name: Put the nspawn-builder binary in path
         run: |
