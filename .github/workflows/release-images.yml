@@ -38,7 +38,7 @@ jobs:
 
       # Setup mkosi
       - name: setup-mkosi
-        uses: systemd/mkosi@master        
+        uses: systemd/mkosi@main        
         
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
