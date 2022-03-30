@@ -38,7 +38,9 @@ jobs:
           chmod 400 ./nspawn.key
 
       - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+        run: |
+          mkdir .ssh/
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       
       - name: Deploy with rsync
         run: rsync -e "ssh -i ./nspawn.key" --dry-run -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
