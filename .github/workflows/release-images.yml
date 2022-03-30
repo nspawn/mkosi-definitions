@@ -77,4 +77,4 @@ jobs:
               
       # Finally deploy the artifacts
       - name: Deploy with rsync
-        run: rsync -e "ssh -i ~/.ssh/nspawn.key" --dry-run -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
+        run: rsync -e "ssh -i ~/.ssh/nspawn.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
