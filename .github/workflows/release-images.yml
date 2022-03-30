@@ -8,17 +8,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - '**.nspawn'
-      - '**.postinst'
       - '**.default'
-      - '**.prepare'
-  pull_request:
-    branches: [ master ]
-    paths:
-      - '**.nspawn'
-      - '**.postinst'
-      - '**.default'
-      - '**.prepare'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
