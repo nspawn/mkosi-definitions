@@ -34,15 +34,15 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          mkdir /home/runner/.ssh/
-          echo "$SSH_PRIVATE_KEY" > /home/runner/.ssh/nspawn.key
-          chmod 400 /home/runner/.ssh/nspawn.key
+          mkdir ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawn.key
+          chmod 400 ~/.ssh/nspawn.key
 
       - name: Adding Known Hosts
         run: |
-          touch /home/runner/.ssh/known_hosts
-          chmod 600 /home/runner/.ssh/known_hosts
+          touch ~/.ssh/known_hosts
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
       
       - name: Deploy with rsync
         run: rsync -e "ssh -i /home/runner/.ssh/nspawn.key" --dry-run -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
