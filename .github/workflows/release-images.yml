@@ -7,8 +7,18 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
+    paths:
+      - '**.nspawn'
+      - '**.postinst'
+      - '**.default'
+      - '**.prepare'
   pull_request:
     branches: [ master ]
+    paths:
+      - '**.nspawn'
+      - '**.postinst'
+      - '**.default'
+      - '**.prepare'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -32,21 +42,6 @@ jobs:
           sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
           sudo chmod +x /usr/bin/nspawn-builder
           sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
-      
-      # Prepare everything for syncing
-      - name: Install SSH Key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawn.key
-          chmod 400 ~/.ssh/nspawn.key
-
-      - name: Adding Known Hosts
-        run: |
-          touch ~/.ssh/known_hosts
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
     
       # Configure GPG
       - name: Configure the GPG Key
@@ -71,6 +66,23 @@ jobs:
           chmod +x ./build.sh ./clean-artifacts.sh
           sudo ./build.sh
           sudo ./clean-artifacts.sh
+          
+       # Prepare everything for syncing
+      - name: Install SSH Key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawn.key
+          chmod 400 ~/.ssh/nspawn.key
+        if: ${{ github.event_name != 'pull_request' }}
+
+      - name: Adding Known Hosts
+        run: |
+          touch ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+        if: ${{ github.event_name != 'pull_request' }}
       
       # Finally deploy the artifacts
       - name: Deploy with rsync
