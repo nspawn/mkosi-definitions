@@ -35,7 +35,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir /home/runner/.ssh/
-          echo -n "$SSH_PRIVATE_KEY" > /home/runner/.ssh/nspawn.key
+          echo "$SSH_PRIVATE_KEY" > /home/runner/.ssh/nspawn.key
           chmod 400 /home/runner/.ssh/nspawn.key
 
       - name: Adding Known Hosts
