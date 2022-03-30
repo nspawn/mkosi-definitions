@@ -43,9 +43,6 @@ jobs:
           touch ~/.ssh/known_hosts
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-      
-      - name: Deploy with rsync
-        run: rsync -e "ssh -i ~/.ssh/nspawn.key" --dry-run -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
     
       # Configure GPG
       - name: Configure the GPG Key
@@ -70,3 +67,7 @@ jobs:
           chmod +x ./build.sh ./clean-artifacts.sh
           sudo ./build.sh
           sudo ./clean-artifacts.sh
+      
+      # Finally deploy the artifacts
+      - name: Deploy with rsync
+        run: rsync -e "ssh -i ~/.ssh/nspawn.key" --dry-run -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
