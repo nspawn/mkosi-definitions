@@ -49,5 +49,18 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build the images
         run: |
-          chmod +x ./build.sh
+          chmod +x ./build.sh ./clean-artifacts.sh
           sudo ./build.sh
+          sudo ./clean-artifacts.sh
+      
+      # Prepare everything for syncing
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2.3.1
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }} 
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      
+      - name: Deploy with rsync
+        run: rsync -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
