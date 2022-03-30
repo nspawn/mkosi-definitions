@@ -1,10 +1,10 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Build Mkosi images for nspawn.org
+name: Build new Mkosi images for nspawn.org
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push but only for the master branch
   push:
     branches: [ master ]
     paths:
@@ -12,10 +12,6 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  
-  # Also run on cron schedule
-  schedule:
-    - cron: 0 0 * * *
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -49,12 +45,19 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          
+      # Get the changed files only
+      - name: Get changed files
+        run: |
+          echo "CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '.default' |sed -e 's/-.*//' | uniq)" >> $GITHUB_ENV
 
       # Runs a set of commands using the runners shell
-      - name: Build the images
+      - name: Build the images for new .default files only
         run: |
-          chmod +x ./build.sh ./clean-artifacts.sh
-          sudo ./build.sh
+          chmod +x ./clean-artifacts.sh
+          for file in ${{ env.CHANGED_FILES }}; do sudo nspawn-builder -n "$file"; done
           sudo ./clean-artifacts.sh
           
        # Prepare everything for syncing
@@ -65,16 +68,13 @@ jobs:
           mkdir ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawn.key
           chmod 400 ~/.ssh/nspawn.key
-        if: ${{ github.event_name != 'pull_request' }}
 
       - name: Adding Known Hosts
         run: |
           touch ~/.ssh/known_hosts
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-        if: ${{ github.event_name != 'pull_request' }}
-      
+              
       # Finally deploy the artifacts
       - name: Deploy with rsync
         run: rsync -e "ssh -i ~/.ssh/nspawn.key" --dry-run -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
-        if: ${{ github.event_name != 'pull_request' }}
