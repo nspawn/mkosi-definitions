@@ -1,0 +1,70 @@
+name: Rebuild Mkosi images for nspawn.org
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+  # Also run on cron schedule
+  schedule:
+    - cron: 0 0 * * 0
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Prepare our custom builder
+      - name: Prepare our builder
+        run: |
+          sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
+          sudo chmod +x /usr/bin/nspawn-builder
+          sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
+    
+      # Configure GPG
+      - name: Configure the GPG Key
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+        run: |
+          echo -n "$GPG_SIGNING_KEY" | base64 --decode | sudo gpg --import
+
+      # Setup mkosi
+      - name: setup-mkosi
+        uses: systemd/mkosi@main        
+        
+      - name: Change ownership of files for checkout
+        run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      - name: Build the images
+        run: |
+          chmod +x ./build.sh ./clean-artifacts.sh
+          sudo ./build.sh
+          sudo ./clean-artifacts.sh
+          
+       # Prepare everything for syncing
+      - name: Install SSH Key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawn.key
+          chmod 400 ~/.ssh/nspawn.key
+
+      - name: Adding Known Hosts
+        run: |
+          touch ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+      
+      # Finally deploy the artifacts
+      - name: Deploy with rsync
+        run: rsync -e "ssh -i ~/.ssh/nspawn.key" --dry-run -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
+        
