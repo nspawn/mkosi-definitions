@@ -6,7 +6,7 @@ Release=36
 Format=tar
 Bootable=no
 Hostname=fedora36
-Output=/srv/www/nspawn.org/public/storage/fedora/36/raw/image.tar.xz
+Output=/srv/www/nspawn.org/public/storage/fedora/36/tar/image.tar.xz
 CompressOutput=xz
 
 [Validation]
