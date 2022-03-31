@@ -4,9 +4,9 @@ name: Build new Mkosi images for nspawn.org
 on:
   # Triggers the workflow on push but only for the master branch
   push:
-    branches: [ master ]
+    branches: [master]
     paths:
-      - '**.default'
+      - "**.default"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,13 +20,20 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Check for duplicated Output directives
+        run: |
+          chmod +x ./validate_directories.sh
+          ./validate_directories.sh
+
       # Prepare our custom builder
       - name: Prepare our builder
         run: |
           sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
           sudo chmod +x /usr/bin/nspawn-builder
           sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
-    
+
       # Configure GPG
       - name: Configure the GPG Key
         env:
@@ -36,8 +43,8 @@ jobs:
 
       # Setup mkosi
       - name: setup-mkosi
-        uses: systemd/mkosi@main        
-        
+        uses: systemd/mkosi@main
+
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
 
@@ -45,11 +52,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      
-      - name: Check for duplicated Output directives
-        run: |
-          chmod +x ./validate_directories.sh
-          ./validate_directories.sh
 
       # Get the changed files only
       - name: Get changed files
@@ -62,8 +64,8 @@ jobs:
           chmod +x ./clean-artifacts.sh
           for file in ${{ env.CHANGED_FILES }}; do sudo nspawn-builder -n "$file"; done
           sudo ./clean-artifacts.sh
-          
-       # Prepare everything for syncing
+
+        # Prepare everything for syncing
       - name: Install SSH Key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -77,7 +79,7 @@ jobs:
           touch ~/.ssh/known_hosts
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-              
+
       # Finally deploy the artifacts
       - name: Deploy with rsync
         run: rsync -e "ssh -i ~/.ssh/nspawn.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/

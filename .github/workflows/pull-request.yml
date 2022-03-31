@@ -3,9 +3,9 @@ name: Test pull requests of new images
 # Controls when the workflow will run
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
     paths:
-      - '**.default'
+      - "**.default"
     types:
       - opened
       - synchronize
@@ -22,24 +22,31 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Check for duplicated Output directives
+        run: |
+          chmod +x ./validate_directories.sh
+          ./validate_directories.sh
+
       # Prepare our custom builder
       - name: Prepare our builder
         run: |
           sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
           sudo chmod +x /usr/bin/nspawn-builder
           sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
-    
+
       # Configure GPG
       - name: Configure the GPG Key
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         run: |
           echo -n "$GPG_SIGNING_KEY" | base64 --decode | sudo gpg --import
-          
+
       # Setup mkosi
       - name: setup-mkosi
-        uses: systemd/mkosi@main        
-        
+        uses: systemd/mkosi@main
+
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
 
@@ -48,16 +55,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check for duplicated Output directives
-        run: |
-          chmod +x ./validate_directories.sh
-          ./validate_directories.sh
-
       # Get the changed files only
       - name: Get changed files
         run: |
           echo "CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '.default' |sed -e 's/-.*//' | uniq)" >> $GITHUB_ENV
-          
+
       # Runs a set of commands using the runners shell
       - name: Build the images
         run: |
