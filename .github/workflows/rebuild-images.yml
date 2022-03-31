@@ -42,6 +42,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Check for duplicated Output directives
+        run: |
+          chmod +x ./validate_directories.sh
+          ./validate_directories.sh
+
       # Runs a set of commands using the runners shell
       - name: Build the images
         run: |
