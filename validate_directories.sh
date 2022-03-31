@@ -14,15 +14,14 @@ fi
 
 if cd "$working_dir"; then
     for f in *.default; do
-      output_dir=""
-      output_dir=$(grep "^Output=" "$f")
-      output_dir=${output_dir#*=}
-      output_dir=${output_dir%/*}/
-      output_dirs+=("${output_dir}")
+        output_dir=""
+        output_dir=$(grep "^Output=" "$f")
+        output_dir=${output_dir#*=}
+        output_dir=${output_dir%/*}/
+        output_dirs+=("${output_dir}")
     done
 fi
 
-total_unique_items=$(printf '%s\n' "${output_dirs[@]}"|awk '!($0 in seen){seen[$0];c++} END {print c}')
+total_unique_items=$(printf '%s\n' "${output_dirs[@]}" | awk '!($0 in seen){seen[$0];c++} END {print c}')
 
-(( total_unique_items != ${#output_dirs[@]} )) && echo "Error: found duplicated directories, leaving." && exit 1 || echo "No duplicated directories found."
-
+((total_unique_items != ${#output_dirs[@]})) && echo "Error: found duplicated directories directives, please validate the Output= section in the mkosi definitions, leaving." && exit 1 || echo "No duplicated directories directives found."
