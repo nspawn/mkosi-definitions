@@ -22,6 +22,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v2
+
       - name: Check for duplicated Output directives
         run: |
           chmod +x ./validate_directories.sh
