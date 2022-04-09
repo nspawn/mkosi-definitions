@@ -58,11 +58,15 @@ jobs:
       # Get the changed files only
       - name: Get changed files
         run: |
-          echo "CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '.default' |sed -e 's/-.*//' | sed 's@.*/@@' | uniq)" >> $GITHUB_ENV
+          echo "CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '.default' | sort -u)" >> $GITHUB_ENV
 
       # Runs a set of commands using the runners shell
       - name: Build the images
         run: |
           chmod +x ./clean-artifacts.sh
-          for file in ${{ env.CHANGED_FILES }}; do sudo nspawn-builder -n "$file"; done
+          declare -A changed_files
+          root_dir=$(pwd)
+          for file in ${{ env.CHANGED_FILES }}; do base_dir=$(echo ${file%/*}  | uniq); build_name=$(echo ${file##*/} |sed -e 's/-.*//' | uniq); changed_files["$base_dir"]="$build_name"; done
+          for base_dir in "${!changed_files[@]}"; do cd "$base_dir" && sudo nspawn-builder -n ${changed_files[$base_dir]}"; cd "$root_dir"; done
+          unset changed_files
           sudo ./clean-artifacts.sh
