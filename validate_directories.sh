@@ -13,7 +13,7 @@ else
 fi
 
 if cd "$working_dir"; then
-    for f in *.default; do
+    for f in */*/*.default; do
         output_dir=""
         output_dir=$(grep "^Output=" "$f")
         output_dir=${output_dir#*=}
