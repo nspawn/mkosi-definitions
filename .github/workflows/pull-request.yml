@@ -67,6 +67,6 @@ jobs:
           declare -A changed_files
           root_dir=$(pwd)
           for file in ${GIT_CHANGED_FILES}; do base_dir=$(echo ${file%/*}  | uniq); build_name=$(echo ${file##*/} |sed -e 's/-.*//' | uniq); changed_files["$base_dir"]="$build_name"; done
-          for base_dir in "${!changed_files[@]}"; do cd "$base_dir" && sudo nspawn-builder -n ${changed_files[$base_dir]}"; cd "$root_dir"; done
+          for base_dir in "${!changed_files[@]}"; do cd "$base_dir" && sudo nspawn-builder -n "${changed_files[$base_dir]}"; cd "$root_dir"; done
           unset changed_files
           sudo ./clean-artifacts.sh
