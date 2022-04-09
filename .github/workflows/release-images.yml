@@ -56,7 +56,7 @@ jobs:
       # Get the changed files only
       - name: Get changed files
         run: |
-          echo "CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '.default' |sed -e 's/-.*//' | uniq)" >> $GITHUB_ENV
+          echo "CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '.default' | sed -e 's/-.*//' | sed 's@.*/@@' | uniq)" >> $GITHUB_ENV
 
       # Runs a set of commands using the runners shell
       - name: Build the images for new .default files only
