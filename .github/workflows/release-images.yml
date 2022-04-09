@@ -53,19 +53,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Get the changed files only
-      - name: Get changed files
-        run: |
-          echo "CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '.default' | sed -e 's/-.*//' | sed 's@.*/@@' | uniq)" >> $GITHUB_ENV
-
       # Runs a set of commands using the runners shell
-      - name: Build the images for new .default files only
-        run: |
+      - run: |
           chmod +x ./clean-artifacts.sh
-          for file in ${{ env.CHANGED_FILES }}; do sudo nspawn-builder -n "$file"; done
-          sudo ./clean-artifacts.sh
 
-        # Prepare everything for syncing
+          # Get the changed files
+          GIT_CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '.default' | sort -u)
+
+          # Build an hashmap
+          declare -A changed_files
+          root_dir=$(pwd)
+          for file in ${GIT_CHANGED_FILES}; do base_dir=$(echo ${file%/*}  | uniq); build_name=$(echo ${file##*/} |sed -e 's/-.*//' | uniq); changed_files["$base_dir"]="$build_name"; done
+          for base_dir in "${!changed_files[@]}"; do cd "$base_dir" && sudo nspawn-builder -n "${changed_files[$base_dir]}"; cd "$root_dir"; done
+          unset changed_files
+          sudo ./clean-artifacts.sh
+          
+      # Prepare everything for syncing
       - name: Install SSH Key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -83,3 +86,4 @@ jobs:
       # Finally deploy the artifacts
       - name: Deploy with rsync
         run: rsync -e "ssh -i ~/.ssh/nspawn.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
+        
