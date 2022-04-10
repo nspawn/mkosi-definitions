@@ -18,8 +18,6 @@ done
 
 if [ -n "$failed_builds" ]; then
     echo "Failed builds: $failed_builds"
-    exit 1
 else
     echo "All builds succeeded"
-    exit 0
 fi
