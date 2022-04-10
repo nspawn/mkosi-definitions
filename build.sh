@@ -4,7 +4,7 @@ failed_builds=""
 root_dir=$(pwd)
 
 for definitions_dir in ./*/*; do
-    if cd $definitions_dir; then
+    if cd "$definitions_dir"; then
         for f in $(for x in *.default; do echo "${x//-*/}"; done | uniq); do
             if ! nspawn-builder -n "$f"; then
                 failed_builds+="$f "
@@ -13,7 +13,13 @@ for definitions_dir in ./*/*; do
             fi
         done
     fi
-    cd "$root_dir"
+    cd "$root_dir" || exit 3
 done
 
-echo "Failed builds: $failed_builds"
+if [ -n "$failed_builds" ]; then
+    echo "Failed builds: $failed_builds"
+    exit 1
+else
+    echo "All builds succeeded"
+    exit 0
+fi
