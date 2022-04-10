@@ -7,11 +7,14 @@ for definitions_dir in ./*/*; do
     if cd "$definitions_dir"; then
         for f in $(for x in *.default; do echo "${x//-*/}"; done | uniq); do
             if ! nspawn-builder -n "$f"; then
+                echo "Failed to build $f in the $definitions_dir directory"
                 failed_builds+="$f "
             else
                 echo "Build of $f succeeded"
             fi
         done
+    else
+        echo "Could not cd to $definitions_dir"
     fi
     cd "$root_dir" || exit 3
 done
