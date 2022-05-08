@@ -16,4 +16,4 @@ Password=root
 [Content]
 PostInstallationScript=blackarch.postinst
 PrepareScript=blackarch.prepare
-ExtraTrees=blackarch.extra
+ExtraTree=blackarch.extra

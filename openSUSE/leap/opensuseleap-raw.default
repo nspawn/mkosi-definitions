@@ -20,5 +20,5 @@ Packages=
   iproute2
   systemd-network
 PostInstallationScript=opensuseleap.postinst
-ExtraTrees=opensuseleap.extra
+ExtraTree=opensuseleap.extra
 NSpawnSettings=opensuseleap.nspawn
