@@ -20,5 +20,9 @@ Packages=
   iputils
   iproute
   systemd-networkd
+  systemd-resolved
   fedora-release
+  pam
+  passwd
+  util-linux
 PostInstallationScript=fedora.postinst
