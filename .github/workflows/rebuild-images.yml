@@ -31,9 +31,8 @@ jobs:
           sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
           sudo chmod +x /usr/bin/nspawn-builder
           sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring systemd-container
-          sudo -E echo $PATH && sudo -E command -v systemd-nspawn
-          command -v systemd-nspawn
-          echo $PATH
+          sudo bash -c 'echo $PATH; command -v systemd-nspawn' 
+          sudo -E env
 
       # Configure GPG
       - name: Configure the GPG Key
