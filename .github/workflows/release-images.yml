@@ -16,7 +16,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -67,7 +67,7 @@ jobs:
           for base_dir in "${!changed_files[@]}"; do cd "$base_dir" && sudo nspawn-builder -n "${changed_files[$base_dir]}"; cd "$root_dir"; done
           unset changed_files
           sudo ./clean-artifacts.sh
-          
+
       # Prepare everything for syncing
       - name: Install SSH Key
         env:
@@ -86,4 +86,3 @@ jobs:
       # Finally deploy the artifacts
       - name: Deploy with rsync
         run: rsync -e "ssh -i ~/.ssh/nspawn.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
-        
