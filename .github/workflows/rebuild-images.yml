@@ -30,9 +30,7 @@ jobs:
         run: |
           sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
           sudo chmod +x /usr/bin/nspawn-builder
-          sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring systemd-container
-          sudo bash -c 'echo $PATH; command -v systemd-nspawn' 
-          sudo -E env
+          sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
 
       # Configure GPG
       - name: Configure the GPG Key
@@ -44,6 +42,11 @@ jobs:
       # Setup mkosi
       - name: setup-mkosi
         uses: systemd/mkosi@main
+        
+      - name: debug
+        run: |
+          sudo bash -c 'echo $PATH; command -v systemd-nspawn' 
+          sudo -E env
 
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
