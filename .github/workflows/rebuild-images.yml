@@ -19,6 +19,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
+      # Workaround until https://github.com/systemd/mkosi/pull/1085 gets merged
+        with:
+          clean: 'false'
 
       - name: Check for duplicated Output directives
         run: |
@@ -56,8 +59,8 @@ jobs:
       - name: Build the images
         run: |
           chmod +x ./build.sh ./clean-artifacts.sh
-          sudo -E ./build.sh
-          sudo -E ./clean-artifacts.sh
+          sudo ./build.sh
+          sudo ./clean-artifacts.sh
 
         # Prepare everything for syncing
       - name: Install SSH Key
