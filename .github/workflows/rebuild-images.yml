@@ -19,10 +19,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
-      # Workaround until https://github.com/systemd/mkosi/pull/1085 gets merged
-        with:
-          clean: 'false'
-
+      
+      # Check duplictaed outputs
       - name: Check for duplicated Output directives
         run: |
           chmod +x ./validate_directories.sh
@@ -51,9 +49,6 @@ jobs:
 
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
 
       # Runs a set of commands using the runners shell
       - name: Build the images
