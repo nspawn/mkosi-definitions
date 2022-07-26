@@ -43,12 +43,8 @@ jobs:
       - name: setup-mkosi
         uses: systemd/mkosi@main
         
-      - name: debug
-        run: |
-          sudo bash -c 'echo $PATH; command -v systemd-nspawn' 
-          sudo -E env
-          sudo ls -la /usr/bin/systemd-nspawn
-          sudo systemd-nspawn --help
+      - name: Debug
+        uses: mxschmitt/action-tmate@v3
 
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
