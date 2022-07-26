@@ -43,8 +43,8 @@ jobs:
       - name: setup-mkosi
         uses: systemd/mkosi@main
         
-      - name: Debug
-        uses: mxschmitt/action-tmate@v3
+      # - name: Debug
+      #  uses: mxschmitt/action-tmate@v3
 
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
