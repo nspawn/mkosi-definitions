@@ -56,8 +56,8 @@ jobs:
       - name: Build the images
         run: |
           chmod +x ./build.sh ./clean-artifacts.sh
-          sudo ./build.sh
-          sudo ./clean-artifacts.sh
+          sudo -E ./build.sh
+          sudo -E ./clean-artifacts.sh
 
         # Prepare everything for syncing
       - name: Install SSH Key
