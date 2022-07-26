@@ -47,6 +47,8 @@ jobs:
         run: |
           sudo bash -c 'echo $PATH; command -v systemd-nspawn' 
           sudo -E env
+          sudo ls -la /usr/bin/systemd-nspawn
+          sudo systemd-nspawn --help
 
       - name: Change ownership of files for checkout
         run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
