@@ -12,6 +12,4 @@ ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
   echo "pts/2"
   echo "pts/3"
   echo "pts/4"
-} >> /etc/securetty
-# Initialize mirrors
-sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
+} >>/etc/securetty
