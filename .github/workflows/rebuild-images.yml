@@ -59,6 +59,9 @@ jobs:
           chmod +x ./build.sh ./clean-artifacts.sh
           sudo ./build.sh
           sudo ./clean-artifacts.sh
+          
+      - name: Debug
+        uses: mxschmitt/action-tmate@v3
 
         # Prepare everything for syncing
       - name: Install SSH Key
