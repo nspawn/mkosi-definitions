@@ -10,6 +10,7 @@ curl -O https://blackarch.org/strap.sh && bash strap.sh && rm strap.sh
 
 # Enable Chaotic AUR repo
 echo -e "[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >>/etc/pacman.conf
+echo -e "[garuda]\nInclude = /etc/pacman.d/chaotic-mirrorlist" >>/etc/pacman.conf
 
 # Install some Garuda-specific packages
-pacman -Syu --needed --noconfirm find-the-command garuda-hooks
+pacman -Syu --needed --noconfirm find-the-command garuda-hooks garuda-update garuda-migrations
