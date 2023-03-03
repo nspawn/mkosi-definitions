@@ -60,8 +60,8 @@ jobs:
           sudo ./build.sh
           sudo ./clean-artifacts.sh
           
-      - name: Debug
-        uses: mxschmitt/action-tmate@v3
+      #- name: Debug
+      #  uses: mxschmitt/action-tmate@v3
 
         # Prepare everything for syncing
       - name: Install SSH Key
@@ -81,3 +81,5 @@ jobs:
       # Finally deploy the artifacts
       - name: Deploy with rsync
         run: rsync -e "ssh -i ~/.ssh/nspawn.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
+        
+      - uses: gautamkrishnar/keepalive-workflow@v1    
