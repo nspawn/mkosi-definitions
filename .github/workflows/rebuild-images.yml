@@ -42,7 +42,7 @@ jobs:
 
       # Setup mkosi
       - name: setup-mkosi
-        uses: systemd/mkosi@v14
+        uses: systemd/mkosi@main
         
       # - name: Debug
       #  uses: mxschmitt/action-tmate@v3
