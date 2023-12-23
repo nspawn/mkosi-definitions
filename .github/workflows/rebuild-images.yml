@@ -80,6 +80,6 @@ jobs:
 
       # Finally deploy the artifacts
       - name: Deploy with rsync
-        run: rsync -e "ssh -i ~/.ssh/nspawnvm1.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/hub-nspawn/storage/
+        run: rsync -e "ssh -i ~/.ssh/nspawnvm1.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_VM1_HOST }}:/var/www/hub-nspawn/storage/
         
       - uses: gautamkrishnar/keepalive-workflow@v1    
