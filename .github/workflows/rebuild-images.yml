@@ -14,7 +14,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
+    runs-on: internal-builders
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -66,20 +66,20 @@ jobs:
         # Prepare everything for syncing
       - name: Install SSH Key
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_VM1_PRIVATE_KEY }}
         run: |
           mkdir ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawn.key
-          chmod 400 ~/.ssh/nspawn.key
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawnvm1.key
+          chmod 400 ~/.ssh/nspawnvm1.key
 
       - name: Adding Known Hosts
         run: |
           touch ~/.ssh/known_hosts
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_VM1_HOST }} >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
       # Finally deploy the artifacts
       - name: Deploy with rsync
-        run: rsync -e "ssh -i ~/.ssh/nspawn.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/nspawn.org/public/storage/
+        run: rsync -e "ssh -i ~/.ssh/nspawnvm1.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/var/www/hub-nspawn/storage/
         
       - uses: gautamkrishnar/keepalive-workflow@v1    
