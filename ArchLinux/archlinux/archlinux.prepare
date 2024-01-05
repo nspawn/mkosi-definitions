@@ -1,5 +1,0 @@
-#!/bin/sh
-# Initialize AL mirrors
-sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
-# Initialize Keyring
-pacman-key --init

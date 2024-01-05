@@ -1,0 +1,11 @@
+#!/bin/sh
+# make sure NetworkManager is running
+systemctl enable NetworkManager
+# Add pts/[0-4] to /etc/securetty to allow logins via `machinectl login`
+{
+  echo "pts/0"
+  echo "pts/1"
+  echo "pts/2"
+  echo "pts/3"
+  echo "pts/4"
+} >> /etc/securetty
