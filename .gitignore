@@ -1,3 +1,4 @@
 *.cache
 *.builddir
 *.output
+hub-images/output
