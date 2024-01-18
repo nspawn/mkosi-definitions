@@ -14,7 +14,10 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
+    runs-on: internal-builders
+    defaults:
+      run:
+        working-directory: hub-images
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -23,14 +26,11 @@ jobs:
       # Check duplictaed outputs
       - name: Check for duplicated Output directives
         run: |
-          chmod +x ./validate_directories.sh
           ./validate_directories.sh
 
       # Prepare our custom builder
       - name: Prepare our builder
         run: |
-          sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
-          sudo chmod +x /usr/bin/nspawn-builder
           sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
 
       # Configure GPG
@@ -42,7 +42,7 @@ jobs:
 
       # Setup mkosi
       - name: setup-mkosi
-        uses: systemd/mkosi@v14
+        uses: systemd/mkosi@main
             
       # - name: Debug
       #  uses: mxschmitt/action-tmate@v3
@@ -56,7 +56,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build the images
         run: |
-          chmod +x ./build.sh ./clean-artifacts.sh
           sudo ./build.sh
           sudo ./clean-artifacts.sh
           
@@ -80,6 +79,6 @@ jobs:
 
       # Finally deploy the artifacts
       - name: Deploy with rsync
-        run: rsync -e "ssh -i ~/.ssh/nspawnvm1.key" -auvzP /srv/www/nspawn.org/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_VM1_HOST }}:/var/www/hub-nspawn/storage/
+        run: rsync -e "ssh -i ~/.ssh/nspawnvm1.key" -auvzP ./output/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_VM1_HOST }}:/var/www/hub-nspawn/storage/
         
       - uses: gautamkrishnar/keepalive-workflow@v1    
