@@ -3,7 +3,7 @@
 root_dir=$(pwd)
 
 for definitions_dir in ./*/*; do
-    if cd "$definitions_dir" && [ -d "$definitions_dir"/mkosi.images ]; then
+    if [ -d "$definitions_dir"/mkosi.images ] && cd "$definitions_dir"; then
         mkosi
     else
         echo "Could not cd to $definitions_dir"
