@@ -45,14 +45,14 @@ jobs:
       #- name: Debug
       #  uses: mxschmitt/action-tmate@v3
 
-      - name: Change ownership of files for checkout
-        run: sudo chown -R $USER:$USER $PWD
+      #- name: Change ownership of files for checkout
+      #  run: sudo chown -R $USER:$USER $PWD
         
       # Clean newly created directories to avoid the build.sh script tryting to iterate them
       - uses: actions/checkout@v2
 
-      - name: Debug
-        uses: mxschmitt/action-tmate@v3
+      #- name: Debug
+      #  uses: mxschmitt/action-tmate@v3
 
       # Runs a set of commands using the runners shell
       - name: Build the images
