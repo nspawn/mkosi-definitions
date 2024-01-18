@@ -18,22 +18,25 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
+    runs-on: internal-builders
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Change ownership of files for checkout
+        env:
+          SERVER_WORKDIR: ${{ secrets.SERVER_WORKDIR }}
+        run: sudo chown -R $USER:$USER $SERVER_WORKDIR
+    
       - uses: actions/checkout@v2
 
       - name: Check for duplicated Output directives
+        working-directory: ./hub-images
         run: |
-          chmod +x ./validate_directories.sh
           ./validate_directories.sh
 
       # Prepare our custom builder
       - name: Prepare our builder
         run: |
-          sudo curl -Lo /usr/bin/nspawn-builder https://raw.githubusercontent.com/nspawn/nspawn-utils/master/nspawn-builder
-          sudo chmod +x /usr/bin/nspawn-builder
           sudo apt-get install --assume-yes --no-install-recommends debian-archive-keyring
 
       # Configure GPG
@@ -42,31 +45,31 @@ jobs:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         run: |
           echo -n "$GPG_SIGNING_KEY" | base64 --decode | sudo gpg --import
+          echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
 
       # Setup mkosi
       - name: setup-mkosi
         uses: systemd/mkosi@main
 
       - name: Change ownership of files for checkout
-        run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
+        env:
+          SERVER_WORKDIR: ${{ secrets.SERVER_WORKDIR }}
+        run: sudo chown -R $USER:$USER $SERVER_WORKDIR
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
+      #- name: Debug
+      #  uses: mxschmitt/action-tmate@v3
+
       # Runs a set of commands using the runners shell
-      - name: Build the images
+      - name: Rebuild images
         run: |
-          chmod +x ./clean-artifacts.sh
+          REBUILD_NEED_FOR=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '.conf' | awk -F'/' '{print $1 "/" $2 "/" $3}' | sort -u)
 
-          # Get the changed files
-          GIT_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '.default' | sort -u)
-
-          # Build an hashmap
-          declare -A changed_files
-          root_dir=$(pwd)
-          for file in ${GIT_CHANGED_FILES}; do base_dir=$(echo ${file%/*}  | uniq); build_name=$(echo ${file##*/} |sed -e 's/-.*//' | uniq); changed_files["$base_dir"]="$build_name"; done
-          for base_dir in "${!changed_files[@]}"; do cd "$base_dir" && sudo nspawn-builder -n "${changed_files[$base_dir]}"; cd "$root_dir"; done
-          unset changed_files
+          root_dir="$(pwd)"
+          for dir in ${REBUILD_NEED_FOR[@]}; do cd "$dir" && sudo mkosi; cd $root_dir; done
+          cd hub-images
           sudo ./clean-artifacts.sh
