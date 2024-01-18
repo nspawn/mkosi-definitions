@@ -7,6 +7,7 @@ on:
     branches: [master]
     paths:
       - "**.conf"
+      - "**.preset"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -65,7 +66,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Rebuild images
         run: |
-          REBUILD_NEED_FOR=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep '.conf' | awk -F'/' '{print $1 "/" $2 "/" $3}' | sort -u)
+          REBUILD_NEED_FOR=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -E '.conf|.preset' | awk -F'/' '{print $1 "/" $2 "/" $3}' | sort -u)
 
           root_dir="$(pwd)"
           for dir in ${REBUILD_NEED_FOR[@]}; do cd "$dir" && sudo mkosi; cd $root_dir; done
