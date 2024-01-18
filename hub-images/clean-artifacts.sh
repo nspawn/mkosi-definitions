@@ -2,14 +2,10 @@
 
 shopt -s extglob
 root_dir="$(pwd)"
-for f in "$root_dir"/*/*; do
+for f in "$root_dir"/output/public/storage/*/*/*; do
   if [ -d "$f" ]; then
     cd "$f"
-    rm -rf *.builddir *.cache
-    if [ -d mkosi.output ]; then
-      cd mkosi.output
-      rm -f !(*.tar.xz|*.raw.xz|*.SHA256SUMS|*.SHA256SUMS.gpg)
-    fi
+      rm -f !(*.tar.xz|*.raw.xz|*.SHA256SUMS|*.SHA256SUMS.gpg|*.nspawn)
   fi
   cd "$root_dir" || exit
 done
