@@ -15,9 +15,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: internal-builders
-    defaults:
-      run:
-        working-directory: hub-images
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -25,6 +22,7 @@ jobs:
       
       # Check duplictaed outputs
       - name: Check for duplicated Output directives
+        working-directory: hub-images
         run: |
           ./validate_directories.sh
 
@@ -58,6 +56,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Build the images
+        working-directory: hub-images
         run: |
           sudo ./build.sh
           sudo ./clean-artifacts.sh
@@ -82,6 +81,7 @@ jobs:
 
       # Finally deploy the artifacts
       - name: Deploy with rsync
+        working-directory: hub-images
         run: rsync -e "ssh -i ~/.ssh/nspawnvm1.key" -auvzP ./output/public/storage/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_VM1_HOST }}:/var/www/hub-nspawn/storage/
         
       - uses: gautamkrishnar/keepalive-workflow@v1    
