@@ -66,6 +66,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_VM1_PRIVATE_KEY }}
         run: |
+          [ -f ~/.ssh/nspawnvm1.key ] && exit 0
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/nspawnvm1.key
           chmod 400 ~/.ssh/nspawnvm1.key
