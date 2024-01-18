@@ -48,7 +48,7 @@ jobs:
       #  uses: mxschmitt/action-tmate@v3
 
       - name: Change ownership of files for checkout
-        run: sudo chown -R $USER:$USER /home/runner/work/mkosi-definitions
+        run: sudo chown -R $USER:$USER /home/azureuser/work/mkosi-definitions
         
       # Clean newly created directories to avoid the build.sh script tryting to iterate them
       - uses: actions/checkout@v2
