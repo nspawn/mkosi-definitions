@@ -2,3 +2,4 @@
 *.builddir
 *.output
 hub-images/output
+hub-images/toolstree
