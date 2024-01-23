@@ -63,6 +63,12 @@ jobs:
       #- name: Debug
       #  uses: mxschmitt/action-tmate@v3
 
+      # Setup mkosi tools tree
+      - name: Setup mkosi tools tree
+        working-directory: ./hub-images
+        run: |
+          sudo mkosi --distribution fedora --include=mkosi-tools --output-dir=./toolstree      
+
       # Runs a set of commands using the runners shell
       - name: Rebuild images
         run: |
