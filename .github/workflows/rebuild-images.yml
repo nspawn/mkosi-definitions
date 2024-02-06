@@ -18,6 +18,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Remove toolstree directory if exists
+        run: sudo rm -rf ./hub-images/toolstree
 
       - name: Change ownership of files for checkout
         env:
