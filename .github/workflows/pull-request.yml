@@ -29,7 +29,7 @@ jobs:
       - name: Change ownership of files for checkout
         env:
           SERVER_WORKDIR: ${{ secrets.SERVER_WORKDIR }}
-        run: sudo chown -R $USER:$USER $SERVER_WORKDIR
+        run: sudo chown -Rf $USER:$USER $SERVER_WORKDIR || true
     
       - uses: actions/checkout@v2
 
@@ -58,7 +58,7 @@ jobs:
       - name: Change ownership of files for checkout
         env:
           SERVER_WORKDIR: ${{ secrets.SERVER_WORKDIR }}
-        run: sudo chown -R $USER:$USER $SERVER_WORKDIR
+        run: sudo chown -R $USER:$USER $SERVER_WORKDIR || true
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
