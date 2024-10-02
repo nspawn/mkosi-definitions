@@ -51,7 +51,7 @@ jobs:
 
       # Setup mkosi
       - name: setup-mkosi
-        uses: systemd/mkosi@main
+        uses: systemd/mkosi@v24.3
 
       - name: Change ownership of files for checkout
         env:
