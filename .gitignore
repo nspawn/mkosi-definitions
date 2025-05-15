@@ -1,7 +1,7 @@
 *.cache
 *.builddir
 *.output
-hub-images/output
-hub-images/toolstree
 mkosi.tools/
+mkosi.tools.manifest
 mkosi.local.conf
+mkosi.local/

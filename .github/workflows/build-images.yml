@@ -1,0 +1,23 @@
+name: Rebuild Mkosi images for nspawn.org
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # Also run on cron schedule
+  schedule:
+    - cron: 0 0 * * 0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: systemd/mkosi@62c050a4d0b60ba906428561e72b08efe99857a9
+
+      - name: Setup mkosi tools tree
+        run: mkosi --distribution fedora --include=mkosi-tools
+
+      - name: Build the images
+        run: ./check-all.py
