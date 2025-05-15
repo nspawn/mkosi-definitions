@@ -9,6 +9,9 @@ matrix = {
     "fedora": ["37", "38", "39"],
     "arch": ["rolling"],
     "opensuse": ["leap", "tumbleweed"],
+    "centos": ["9"],
+    "alma": ["9"],
+    "rocky": ["9"],
 }
 
 output_dirs = set()
