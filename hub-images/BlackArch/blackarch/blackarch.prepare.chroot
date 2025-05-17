@@ -1,7 +1,0 @@
-#!/bin/sh
-# Initialize AL mirrors
-sed -i 's/#Server/Server/' /etc/pacman.d/mirrorlist
-# Enable multilib
-sed -i 's/#\[multilib\]/[multilib]/g' /etc/pacman.conf && sed -i '/\[multilib\]/!b;n;cInclude = /etc/pacman.d/mirrorlist' /etc/pacman.conf
-# Initialize BlackArch Keyring
-curl -O https://blackarch.org/strap.sh && bash strap.sh && rm strap.sh

@@ -1,2 +1,0 @@
-enable systemd-networkd.service
-enable systemd-resolved.service

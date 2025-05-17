@@ -1,3 +1,0 @@
-enable systemd-networkd.service
-enable systemd-resolved.service
-enable apache2.service
