@@ -19,5 +19,8 @@ jobs:
       - name: Setup mkosi tools tree
         run: mkosi --distribution=fedora --include=mkosi-tools --format=directory --profile=package-manager -C ""
 
+      - name: Disable signing
+        run: printf "[Validation]\nChecksum=no\nSign=no\nKey=\n" >> mkosi.local.conf
+
       - name: Build the images
         run: ./check-all.py
