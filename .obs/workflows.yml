@@ -1,0 +1,15 @@
+# Open Build Service workflows (https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-scm-ci-workflow-integration).
+# Requires a workflow token created in the OBS account of a project maintainer
+# and a GitHub webhook pointing at it. On every push to the branch below OBS
+# re-runs the source services of the listed packages, which fetch this
+# repository and rebuild the images.
+rebuild:
+  steps:
+    - trigger_services:
+        project: system:systemd:nspawn
+        package: fedora
+  filters:
+    event: push
+    branches:
+      only:
+        - obs
