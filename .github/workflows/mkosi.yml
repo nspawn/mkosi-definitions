@@ -1,0 +1,120 @@
+# Build every image of the matrix with mkosi and, on master, push it to hub.nspawn.org.
+# Pull requests only build. The weekly run picks up package updates.
+name: mkosi
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - mkosi.conf
+      - mkosi.conf.d/**
+      - mkosi.profiles/**
+      - mkosi.repart/**
+      - mkosi.bump
+      - .github/workflows/mkosi.yml
+  pull_request:
+    paths:
+      - mkosi.conf
+      - mkosi.conf.d/**
+      - mkosi.profiles/**
+      - mkosi.repart/**
+      - mkosi.bump
+      - .github/workflows/mkosi.yml
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    name: ${{ matrix.repo }}:${{ matrix.release }}
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.repo }}-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # distro and release are what mkosi takes; repo and tags are what the hub shows.
+          # The first tag is the canonical one and also gets a dated variant (44-20260922).
+          - distro: arch
+            release: rolling
+            repo: archlinux
+            tags: rolling latest
+          - distro: debian
+            release: trixie
+            repo: debian
+            tags: 13 trixie latest
+          - distro: ubuntu
+            release: noble
+            repo: ubuntu
+            tags: 24.04 noble latest
+          - distro: fedora
+            release: "44"
+            repo: fedora
+            tags: 44 latest
+          - distro: opensuse
+            release: tumbleweed
+            repo: opensuse
+            tags: tumbleweed latest
+          - distro: centos
+            release: "10"
+            repo: centos
+            tags: 10 latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: systemd/mkosi@4736cd836108a97772142c461c49f1ddb4172348 # v27
+
+      - name: Configure
+        run: |
+          echo "IMAGE_VERSION=$(./mkosi.bump)" >> "$GITHUB_ENV"
+          tee mkosi.local.conf <<EOF
+          [Distribution]
+          Distribution=${{ matrix.distro }}
+          Release=${{ matrix.release }}
+          EOF
+
+      - name: Summary
+        run: mkosi --image-version="$IMAGE_VERSION" summary
+
+      - name: Build
+        run: sudo mkosi --image-version="$IMAGE_VERSION" -f build
+
+      - name: Inspect the OCI layout
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" mkosi.output
+          # Named after mkosi's distribution (arch_..., not archlinux_...): %i in Output= is
+          # expanded before the distribution fragment sets ImageId.
+          layout=$(find mkosi.output -maxdepth 1 -type d -name '${{ matrix.distro }}_*' | head -n1)
+          test -f "$layout/oci-layout"
+          echo "LAYOUT=$layout" >> "$GITHUB_ENV"
+          sudo apt-get install -y -q --no-install-recommends skopeo >/dev/null
+          skopeo inspect "oci:$layout" | head -n 40
+          du -sh "$layout"
+
+      - name: Keep the package manifest
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ matrix.repo }}-${{ matrix.release }}-manifest
+          path: mkosi.output/*.manifest
+          if-no-files-found: warn
+
+      - name: Push to the hub
+        if: github.event_name != 'pull_request'
+        env:
+          HUB_USER: ${{ secrets.HUB_USER }}
+          HUB_PASSWORD: ${{ secrets.HUB_PASSWORD }}
+        run: |
+          printf '%s' "$HUB_PASSWORD" | skopeo login hub.nspawn.org -u "$HUB_USER" --password-stdin
+          set -- ${{ matrix.tags }}
+          for tag in "$@" "$1-$IMAGE_VERSION"; do
+            skopeo copy --retry-times 3 "oci:$LAYOUT" "docker://hub.nspawn.org/${{ matrix.repo }}:$tag"
+          done
+          skopeo logout hub.nspawn.org

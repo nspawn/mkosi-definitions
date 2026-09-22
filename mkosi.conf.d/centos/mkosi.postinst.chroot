@@ -1,0 +1,14 @@
+#!/bin/sh
+# systemd-networkd configures host0 from the .network file nspawn hands the machine;
+# systemd-resolved gives it the DNS servers from the same file.
+systemctl enable systemd-networkd
+systemctl enable systemd-resolved
+ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+# Add pts/[0-4] to /etc/securetty to allow logins via `machinectl login`
+{
+  echo "pts/0"
+  echo "pts/1"
+  echo "pts/2"
+  echo "pts/3"
+  echo "pts/4"
+} >> /etc/securetty

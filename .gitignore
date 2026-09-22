@@ -1,7 +1,8 @@
-*.cache
-*.builddir
-*.output
+mkosi.output/
+mkosi.cache/
+mkosi.builddir/
 mkosi.tools/
 mkosi.tools.manifest
+mkosi.version
 mkosi.local.conf
 mkosi.local/

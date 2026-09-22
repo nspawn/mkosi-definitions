@@ -1,0 +1,5 @@
+#!/bin/sh
+# The image version is the build date. `mkosi --auto-bump` writes it to mkosi.version,
+# CI passes it with --image-version. It ends up in the artifact name, in the
+# org.opencontainers.image.version annotation and as the dated tag on the hub.
+date -u +%Y%m%d
