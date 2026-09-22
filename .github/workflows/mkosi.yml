@@ -32,7 +32,7 @@ jobs:
     name: ${{ matrix.repo }}:${{ matrix.release }}
     runs-on: ubuntu-24.04
     concurrency:
-      group: ${{ github.workflow }}-${{ matrix.repo }}-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ matrix.repo }}-${{ matrix.release }}-${{ github.ref }}
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
@@ -40,30 +40,27 @@ jobs:
         include:
           # distro and release are what mkosi takes; repo and tags are what the hub shows.
           # The first tag is the canonical one and also gets a dated variant (44-20260922).
-          - distro: arch
-            release: rolling
-            repo: archlinux
-            tags: rolling latest
-          - distro: debian
-            release: trixie
-            repo: debian
-            tags: 13 trixie latest
-          - distro: ubuntu
-            release: noble
-            repo: ubuntu
-            tags: 24.04 noble latest
-          - distro: fedora
-            release: "44"
-            repo: fedora
-            tags: 44 latest
-          - distro: opensuse
-            release: tumbleweed
-            repo: opensuse
-            tags: tumbleweed latest
-          - distro: centos
-            release: "10"
-            repo: centos
-            tags: 10 latest
+          - { distro: arch,     release: rolling,      repo: archlinux,  tags: rolling latest }
+          - { distro: debian,   release: trixie,       repo: debian,     tags: 13 trixie latest }
+          - { distro: debian,   release: bookworm,     repo: debian,     tags: 12 bookworm }
+          - { distro: debian,   release: sid,          repo: debian,     tags: sid unstable }
+          - { distro: ubuntu,   release: resolute,     repo: ubuntu,     tags: 26.04 resolute latest }
+          - { distro: ubuntu,   release: noble,        repo: ubuntu,     tags: 24.04 noble }
+          - { distro: ubuntu,   release: jammy,        repo: ubuntu,     tags: 22.04 jammy }
+          - { distro: fedora,   release: "44",         repo: fedora,     tags: 44 latest }
+          - { distro: fedora,   release: "43",         repo: fedora,     tags: "43" }
+          - { distro: fedora,   release: rawhide,      repo: fedora,     tags: rawhide }
+          - { distro: centos,   release: "10",         repo: centos,     tags: 10 latest }
+          - { distro: centos,   release: "9",          repo: centos,     tags: "9" }
+          - { distro: alma,     release: "10",         repo: almalinux,  tags: 10 latest }
+          - { distro: alma,     release: "9",          repo: almalinux,  tags: "9" }
+          - { distro: rocky,    release: "10",         repo: rockylinux, tags: 10 latest }
+          - { distro: rocky,    release: "9",          repo: rockylinux, tags: "9" }
+          - { distro: opensuse, release: tumbleweed,   repo: opensuse,   tags: tumbleweed latest }
+          - { distro: opensuse, release: "16.0",       repo: opensuse,   tags: 16.0 leap }
+          - { distro: kali,     release: kali-rolling, repo: kali,       tags: rolling latest }
+          - { distro: rhel-ubi, release: "10",         repo: rhel-ubi,   tags: 10 latest }
+          - { distro: rhel-ubi, release: "9",          repo: rhel-ubi,   tags: "9" }
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
