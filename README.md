@@ -11,9 +11,9 @@ built by GitHub Actions from this repository and pushed to the hub.
 | `debian` | `13`, `trixie`, `latest`; `12`, `bookworm`; `sid`, `unstable` | `mkosi.conf.d/debian/` |
 | `ubuntu` | `26.04`, `resolute`, `latest`; `24.04`, `noble`; `22.04`, `jammy` | `mkosi.conf.d/ubuntu/` |
 | `fedora` | `44`, `latest`; `43`; `rawhide` | `mkosi.conf.d/fedora/` |
-| `centos` | `10`, `latest`; `9` | `mkosi.conf.d/centos/` |
-| `almalinux` | `10`, `latest`; `9` | `mkosi.conf.d/centos/` plus `alma.conf` |
-| `rockylinux` | `10`, `latest`; `9` | `mkosi.conf.d/centos/` plus `rocky.conf` |
+| `centos` | `10`, `latest`; `9` | `mkosi.conf.d/el/` plus `el-centos.conf` |
+| `almalinux` | `10`, `latest`; `9` | `mkosi.conf.d/el/` plus `el-alma.conf` |
+| `rockylinux` | `10`, `latest`; `9` | `mkosi.conf.d/el/` plus `el-rocky.conf` |
 | `opensuse` | `tumbleweed`, `latest`; `16.0`, `leap` | `mkosi.conf.d/opensuse/` |
 | `kali` | `rolling`, `latest` | `mkosi.conf.d/kali/` |
 
