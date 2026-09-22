@@ -108,8 +108,24 @@ jobs:
           HUB_PASSWORD: ${{ secrets.HUB_PASSWORD }}
         run: |
           printf '%s' "$HUB_PASSWORD" | skopeo login hub.nspawn.org -u "$HUB_USER" --password-stdin
+          push() {
+            # A registry restart or a hiccup mid-upload is not worth a rebuild: try again.
+            for attempt in 1 2 3 4 5; do
+              skopeo copy --retry-times 3 "oci:$LAYOUT" "docker://hub.nspawn.org/${{ matrix.repo }}:$1" && return 0
+              echo "push of $1 failed (attempt $attempt of 5); retrying in 30 seconds"
+              sleep 30
+            done
+            return 1
+          }
           set -- ${{ matrix.tags }}
-          for tag in "$@" "$1-$IMAGE_VERSION"; do
-            skopeo copy --retry-times 3 "oci:$LAYOUT" "docker://hub.nspawn.org/${{ matrix.repo }}:$tag"
+          for tag in "$@"; do
+            push "$tag"
           done
+          # The dated tag names one build for good: the first of the day, never overwritten.
+          dated="$1-$IMAGE_VERSION"
+          if skopeo inspect --raw "docker://hub.nspawn.org/${{ matrix.repo }}:$dated" >/dev/null 2>&1; then
+            echo "$dated exists already and stays as it is"
+          else
+            push "$dated"
+          fi
           skopeo logout hub.nspawn.org
