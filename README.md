@@ -8,11 +8,14 @@ built by GitHub Actions from this repository and pushed to the hub.
 | Image | Tags | Definition |
 | --- | --- | --- |
 | `archlinux` | `rolling`, `latest` | `mkosi.conf.d/arch/` |
-| `debian` | `13`, `trixie`, `latest` | `mkosi.conf.d/debian/` |
-| `ubuntu` | `24.04`, `noble`, `latest` | `mkosi.conf.d/ubuntu/` |
-| `fedora` | `44`, `latest` | `mkosi.conf.d/fedora/` |
-| `opensuse` | `tumbleweed`, `latest` | `mkosi.conf.d/opensuse/` |
-| `centos` | `10`, `latest` | `mkosi.conf.d/centos/` |
+| `debian` | `13`, `trixie`, `latest`; `12`, `bookworm`; `sid`, `unstable` | `mkosi.conf.d/debian/` |
+| `ubuntu` | `26.04`, `resolute`, `latest`; `24.04`, `noble`; `22.04`, `jammy` | `mkosi.conf.d/ubuntu/` |
+| `fedora` | `44`, `latest`; `43`; `rawhide` | `mkosi.conf.d/fedora/` |
+| `centos` | `10`, `latest`; `9` | `mkosi.conf.d/centos/` |
+| `almalinux` | `10`, `latest`; `9` | `mkosi.conf.d/centos/` plus `alma.conf` |
+| `rockylinux` | `10`, `latest`; `9` | `mkosi.conf.d/centos/` plus `rocky.conf` |
+| `opensuse` | `tumbleweed`, `latest`; `16.0`, `leap` | `mkosi.conf.d/opensuse/` |
+| `kali` | `rolling`, `latest` | `mkosi.conf.d/kali/` |
 
 Every build also gets a dated tag (`fedora:44-20260922`) to go back to. The images boot
 systemd, log in as `root` with password `root` on the console, and carry systemd-networkd
