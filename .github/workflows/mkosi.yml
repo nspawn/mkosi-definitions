@@ -59,6 +59,14 @@ jobs:
           - { distro: opensuse, release: tumbleweed,   repo: opensuse,   tags: tumbleweed latest }
           - { distro: opensuse, release: "16.0",       repo: opensuse,   tags: 16.0 leap }
           - { distro: kali,     release: kali-rolling, repo: kali,       tags: rolling latest }
+          # Services: a profile on the Debian image, tagged with the version of the package
+          # named in versionof (read from mkosi's manifest): 1.26.3, 1.26 and latest.
+          - { distro: debian, release: trixie, profile: nginx,      repo: nginx,      versionof: nginx }
+          - { distro: debian, release: trixie, profile: apache,     repo: apache,     versionof: apache2 }
+          - { distro: debian, release: trixie, profile: caddy,      repo: caddy,      versionof: caddy }
+          - { distro: debian, release: trixie, profile: postgresql, repo: postgresql, versionof: postgresql-17 }
+          - { distro: debian, release: trixie, profile: mariadb,    repo: mariadb,    versionof: mariadb-server }
+          - { distro: debian, release: trixie, profile: valkey,     repo: valkey,     versionof: valkey-server }
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -75,6 +83,9 @@ jobs:
           Distribution=${{ matrix.distro }}
           Release=${{ matrix.release }}
           EOF
+          if [ -n "${{ matrix.profile }}" ]; then
+            printf '\n[Config]\nProfiles=%s\n' "${{ matrix.profile }}" | tee -a mkosi.local.conf
+          fi
 
       - name: Summary
         run: mkosi --image-version="$IMAGE_VERSION" summary
@@ -85,14 +96,32 @@ jobs:
       - name: Inspect the OCI layout
         run: |
           sudo chown -R "$(id -u):$(id -g)" mkosi.output
-          # Named after mkosi's distribution (arch_..., not archlinux_...): %i in Output= is
-          # expanded before the distribution fragment sets ImageId.
-          layout=$(find mkosi.output -maxdepth 1 -type d -name '${{ matrix.distro }}_*' | head -n1)
+          # Named after the image id, which is the repository on the hub.
+          layout=$(find mkosi.output -maxdepth 1 -type d -name '${{ matrix.repo }}_*' | head -n1)
           test -f "$layout/oci-layout"
           echo "LAYOUT=$layout" >> "$GITHUB_ENV"
           sudo apt-get install -y -q --no-install-recommends skopeo >/dev/null
           skopeo inspect "oci:$layout" | head -n 40
           du -sh "$layout"
+
+      - name: Tags
+        run: |
+          if [ -n "${{ matrix.versionof }}" ]; then
+            version=$(python3 - "$LAYOUT.manifest" '${{ matrix.versionof }}' <<'EOF'
+          import json, re, sys
+          packages = json.load(open(sys.argv[1]))["packages"]
+          version = next(p["version"] for p in packages if p["name"] == sys.argv[2])
+          version = version.split(":", 1)[-1]         # no epoch
+          version = version.split("-", 1)[0]          # no Debian revision
+          print(re.split(r"[+~]", version)[0])        # no +dfsg or ~rc suffix
+          EOF
+            )
+            tags="$version ${version%.*} latest"
+          else
+            tags="${{ matrix.tags }}"
+          fi
+          echo "TAGS=$tags" >> "$GITHUB_ENV"
+          echo "tags: $tags"
 
       - name: Keep the package manifest
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -117,7 +146,7 @@ jobs:
             done
             return 1
           }
-          set -- ${{ matrix.tags }}
+          set -- $TAGS
           for tag in "$@"; do
             push "$tag"
           done
