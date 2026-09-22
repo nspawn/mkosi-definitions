@@ -1,0 +1,8 @@
+# apt sources for the Kali build. mkosi only writes its own when this file is absent, and
+# its own would insist on the Kali keyring being installed in the tools tree, which the
+# Fedora tools tree cannot provide; here the keyring comes from this sandbox tree.
+Types: deb
+URIs: http://http.kali.org/kali
+Suites: kali-rolling
+Components: main contrib non-free non-free-firmware
+Signed-By: /usr/share/keyrings/kali-archive-keyring.gpg
