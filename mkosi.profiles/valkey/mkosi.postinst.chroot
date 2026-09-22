@@ -1,0 +1,3 @@
+#!/bin/sh
+# Debian enables most services on installation; make sure of it.
+systemctl enable valkey-server

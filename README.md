@@ -17,6 +17,23 @@ built by GitHub Actions from this repository and pushed to the hub.
 | `opensuse` | `tumbleweed`, `latest`; `16.0`, `leap` | `mkosi.conf.d/opensuse/` |
 | `kali` | `rolling`, `latest` | `mkosi.conf.d/kali/` |
 
+Services, each a profile on the Debian image, tagged with the version of the package
+Debian ships (`nginx:1.26.3`, `nginx:1.26`, `nginx:latest`):
+
+| Image | Package | Serves | Definition |
+| --- | --- | --- | --- |
+| `nginx` | `nginx` | port 80, `/var/www/html`, `/etc/nginx` | `mkosi.profiles/nginx/` |
+| `apache` | `apache2` | port 80, `/var/www/html`, `/etc/apache2` | `mkosi.profiles/apache/` |
+| `caddy` | `caddy` | port 80, `/usr/share/caddy`, `/etc/caddy` | `mkosi.profiles/caddy/` |
+| `postgresql` | `postgresql` (17) | port 5432, `/var/lib/postgresql`, `/etc/postgresql` | `mkosi.profiles/postgresql/` |
+| `mariadb` | `mariadb-server` | port 3306, `/var/lib/mysql`, `/etc/mysql` | `mkosi.profiles/mariadb/` |
+| `valkey` | `valkey-server` | port 6379, `/var/lib/valkey`, `/etc/valkey` | `mkosi.profiles/valkey/` |
+
+They are full Debian machines with the service installed and enabled: `nspawn shell`
+gets a root shell, `systemctl status nginx` inside says what it is doing, the paths above
+are what to mount with `-v` to keep data and configuration on the host, and `-p` publishes
+the port. Security updates come from Debian; the weekly rebuild picks them up.
+
 Every build also gets a dated tag (`fedora:44-20260922`) to go back to: the first build of
 a day owns that tag, a later one the same day moves the other tags but leaves it alone, so a
 dated tag always names the same image. The hub keeps the last ten per repository. The images boot
@@ -64,6 +81,7 @@ or push it to any registry `nspawn pull` can reach.
 mkosi.conf                 output format, annotations and what every image shares
 mkosi.conf.d/<distro>/     [Match] Distribution=..., default release, packages, postinst
 mkosi.profiles/disk/       the bootable disk variant (kernel per distribution)
+mkosi.profiles/<service>/  a service on the Debian image: its packages, its units, its text
 mkosi.repart/              partitions of the disk variant
 mkosi.bump                 the image version: the build date
 .github/workflows/mkosi.yml   the matrix, one job per image
@@ -75,6 +93,10 @@ Edit the packages or the `mkosi.postinst.chroot` of the distribution and open a 
 request: the workflow builds every image of the matrix and keeps the package manifest of
 each as an artifact, without pushing anything. Once merged to `master` the same workflow
 builds again and pushes to the hub; it also runs every Sunday to pick up package updates.
+
+To add a service, add a profile under `mkosi.profiles/` (packages, a `mkosi.postinst.chroot`
+that enables the units, the image id and the text) and a matrix entry with the package
+whose version becomes the tag.
 
 To add a distribution or release, add its directory under `mkosi.conf.d/` (and a kernel
 entry under `mkosi.profiles/disk/mkosi.conf.d/` if it should have a disk variant) and an
