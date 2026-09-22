@@ -17,7 +17,9 @@ built by GitHub Actions from this repository and pushed to the hub.
 | `opensuse` | `tumbleweed`, `latest`; `16.0`, `leap` | `mkosi.conf.d/opensuse/` |
 | `kali` | `rolling`, `latest` | `mkosi.conf.d/kali/` |
 
-Every build also gets a dated tag (`fedora:44-20260922`) to go back to. The images boot
+Every build also gets a dated tag (`fedora:44-20260922`) to go back to: the first build of
+a day owns that tag, a later one the same day moves the other tags but leaves it alone, so a
+dated tag always names the same image. The hub keeps the last ten per repository. The images boot
 systemd, log in as `root` with password `root` on the console, and carry systemd-networkd
 and systemd-resolved, which is how they get their address and DNS on the nspawn bridge.
 
