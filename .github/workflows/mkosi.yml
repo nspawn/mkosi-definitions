@@ -59,8 +59,6 @@ jobs:
           - { distro: opensuse, release: tumbleweed,   repo: opensuse,   tags: tumbleweed latest }
           - { distro: opensuse, release: "16.0",       repo: opensuse,   tags: 16.0 leap }
           - { distro: kali,     release: kali-rolling, repo: kali,       tags: rolling latest }
-          - { distro: rhel-ubi, release: "10",         repo: rhel-ubi,   tags: 10 latest }
-          - { distro: rhel-ubi, release: "9",          repo: rhel-ubi,   tags: "9" }
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

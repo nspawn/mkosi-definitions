@@ -16,7 +16,6 @@ built by GitHub Actions from this repository and pushed to the hub.
 | `rockylinux` | `10`, `latest`; `9` | `mkosi.conf.d/centos/` plus `rocky.conf` |
 | `opensuse` | `tumbleweed`, `latest`; `16.0`, `leap` | `mkosi.conf.d/opensuse/` |
 | `kali` | `rolling`, `latest` | `mkosi.conf.d/kali/` |
-| `rhel-ubi` | `10`, `latest`; `9` | `mkosi.conf.d/rhel-ubi/` |
 
 Every build also gets a dated tag (`fedora:44-20260922`) to go back to. The images boot
 systemd, log in as `root` with password `root` on the console, and carry systemd-networkd
