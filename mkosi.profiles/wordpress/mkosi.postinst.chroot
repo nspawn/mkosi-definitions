@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+phpver=$(ls /etc/php)
+systemctl enable nginx "php$phpver-fpm" mariadb wordpress-setup
+# nginx serves Debian's WordPress through PHP-FPM; wp-content lives in /var/lib/wordpress.
+printf '%s\n' 'server {' \
+    '    listen 80 default_server;' \
+    '    listen [::]:80 default_server;' \
+    '    root /usr/share/wordpress;' \
+    '    index index.php;' \
+    '    client_max_body_size 64m;' \
+    '    location / {' \
+    '        try_files $uri $uri/ /index.php?$args;' \
+    '    }' \
+    '    location /wp-content {' \
+    '        alias /var/lib/wordpress/wp-content;' \
+    '    }' \
+    '    location ~ \.php$ {' \
+    '        include snippets/fastcgi-php.conf;' \
+    "        fastcgi_pass unix:/run/php/php$phpver-fpm.sock;" \
+    '    }' \
+    '}' > /etc/nginx/sites-available/wordpress
+ln -sf /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/wordpress
+rm -f /etc/nginx/sites-enabled/default
+# Themes, plugins and uploads are managed from the browser, so the web server owns them.
+chown -R www-data:www-data /var/lib/wordpress/wp-content

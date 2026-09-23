@@ -1,0 +1,13 @@
+[Unit]
+Description=Create the WordPress database on the first boot
+After=mariadb.service
+Requires=mariadb.service
+Before=nginx.service
+ConditionPathExists=!/etc/wordpress/config-default.php
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/wordpress-setup
+
+[Install]
+WantedBy=multi-user.target

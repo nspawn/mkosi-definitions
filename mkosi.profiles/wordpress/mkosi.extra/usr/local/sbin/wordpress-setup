@@ -1,0 +1,20 @@
+#!/bin/sh
+# First boot: a database and a user for WordPress with a password of this machine's own,
+# and Debian's config-default.php pointing at them. After that the installer at / finishes
+# the job in the browser.
+set -e
+pass=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 24)
+mariadb -e "CREATE DATABASE IF NOT EXISTS wordpress; \
+    CREATE USER IF NOT EXISTS 'wordpress'@'localhost' IDENTIFIED BY '$pass'; \
+    GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost'; FLUSH PRIVILEGES;"
+umask 027
+cat > /etc/wordpress/config-default.php <<EOF
+<?php
+define('DB_NAME', 'wordpress');
+define('DB_USER', 'wordpress');
+define('DB_PASSWORD', '$pass');
+define('DB_HOST', 'localhost');
+define('DB_COLLATE', 'utf8_general_ci');
+define('WP_CONTENT_DIR', '/var/lib/wordpress/wp-content');
+EOF
+chown root:www-data /etc/wordpress/config-default.php

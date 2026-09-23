@@ -1,0 +1,17 @@
+# Forgejo's contrib/systemd/forgejo.service, with the home under /var/lib/forgejo.
+[Unit]
+Description=Forgejo (Beyond coding. We forge.)
+After=network.target
+
+[Service]
+Type=notify
+User=git
+Group=git
+WorkingDirectory=/var/lib/forgejo/
+ExecStart=/usr/local/bin/forgejo web --config /etc/forgejo/app.ini
+Restart=always
+RestartSec=2s
+Environment=USER=git HOME=/var/lib/forgejo FORGEJO_WORK_DIR=/var/lib/forgejo
+
+[Install]
+WantedBy=multi-user.target

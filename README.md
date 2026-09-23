@@ -40,6 +40,9 @@ Debian ships (`nginx:1.26.3`, `nginx:1.26`, `nginx:latest`):
 | `prometheus` | `prometheus` | port 9090, `/var/lib/prometheus`, `/etc/prometheus` | `mkosi.profiles/prometheus/` |
 | `node-exporter` | `prometheus-node-exporter` | port 9100 | `mkosi.profiles/node-exporter/` |
 | `grafana` | `grafana` (Grafana Labs' repository) | port 3000, `/var/lib/grafana`, `/etc/grafana` | `mkosi.profiles/grafana/` |
+| `wordpress` | `wordpress` with nginx, PHP-FPM and MariaDB | port 80, `/var/lib/wordpress`, `/var/lib/mysql`, `/etc/wordpress` | `mkosi.profiles/wordpress/` |
+| `syncthing` | `syncthing` | ports 8384 (GUI) and 22000, `/var/lib/syncthing` | `mkosi.profiles/syncthing/` |
+| `forgejo` | the release binary from Codeberg | port 3000, `/var/lib/forgejo`, `/etc/forgejo` | `mkosi.profiles/forgejo/` |
 
 They are full Debian machines with the service installed and enabled: `nspawn shell`
 gets a root shell, `systemctl status nginx` inside says what it is doing, the paths above
@@ -53,7 +56,9 @@ password before publishing a port to the outside: PostgreSQL takes password logi
 the network once `ALTER USER postgres PASSWORD '...'` has run, MariaDB's root logs in
 through the socket and network users are created from there, Valkey has no password until
 `requirepass` is set, Mosquitto allows anonymous clients until a password file is added,
-RabbitMQ's guest account works from localhost only, Grafana starts with admin/admin, Samba's
+RabbitMQ's guest account works from localhost only, Grafana starts with admin/admin,
+WordPress and Forgejo finish their installation in the browser on the first visit,
+Syncthing's GUI has no password until one is set there, Samba's
 `data` share is open to guests, and the OpenSSH image only lets root in with a key (mount
 your `authorized_keys` at `/root/.ssh/authorized_keys`) and makes its host keys on the first
 boot, so machines do not share them. The DNS images (unbound, dnsmasq, bind9) turn off
@@ -121,7 +126,10 @@ builds again and pushes to the hub; it also runs every Sunday to pick up package
 
 To add a service, add a profile under `mkosi.profiles/` (packages, a `mkosi.postinst.chroot`
 that enables the units, the image id and the text) and a matrix entry with the package
-whose version becomes the tag.
+whose version becomes the tag. Something that Debian does not package, like Forgejo, is
+installed by a `mkosi.prepare` script, the one mkosi runs with network access, that verifies
+what it downloads and writes the version it installed into the image, to a file the matrix
+entry names with `versionfile`.
 
 To add a distribution or release, add its directory under `mkosi.conf.d/` (and a kernel
 entry under `mkosi.profiles/disk/mkosi.conf.d/` if it should have a disk variant) and an
