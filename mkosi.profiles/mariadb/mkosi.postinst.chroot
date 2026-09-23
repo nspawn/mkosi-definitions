@@ -1,3 +1,6 @@
 #!/bin/sh
-# Debian enables most services on installation; make sure of it.
+set -e
 systemctl enable mariadb
+# Listen on every address; Debian's default is localhost only. root authenticates through
+# the unix socket (nspawn shell, then mariadb); create users for the network from there.
+printf '[mysqld]\nbind-address = 0.0.0.0\n' > /etc/mysql/mariadb.conf.d/60-nspawn.cnf

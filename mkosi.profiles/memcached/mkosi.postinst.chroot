@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+systemctl enable memcached
+# Listen on every address; Debian's default is localhost only.
+sed -i 's/^-l 127.0.0.1$/-l 0.0.0.0/' /etc/memcached.conf

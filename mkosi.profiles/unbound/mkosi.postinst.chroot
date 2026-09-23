@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+systemctl enable unbound
+# Answer on every address for the private networks (the nspawn bridge among them);
+# Debian's default is localhost only.
+printf '%s\n' 'server:' \
+    '    interface: 0.0.0.0' '    interface: ::0' \
+    '    access-control: 127.0.0.0/8 allow' '    access-control: 10.0.0.0/8 allow' \
+    '    access-control: 172.16.0.0/12 allow' '    access-control: 192.168.0.0/16 allow' \
+    '    access-control: ::1/128 allow' '    access-control: fc00::/7 allow' \
+    > /etc/unbound/unbound.conf.d/nspawn.conf
+# A DNS server owns port 53: systemd-resolved must not run its stub listener, and the
+# machine's own lookups go to the upstream servers resolved learned from the bridge.
+mkdir -p /etc/systemd/resolved.conf.d
+printf '[Resolve]\nDNSStubListener=no\n' > /etc/systemd/resolved.conf.d/nspawn.conf
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf

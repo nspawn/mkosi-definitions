@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+systemctl enable mosquitto
+# Debian's default configuration has no listener at all. One on 1883, anonymous: the
+# machine is the boundary. Put a password_file and allow_anonymous false here before
+# publishing the port to the outside.
+printf 'listener 1883\nallow_anonymous true\n' > /etc/mosquitto/conf.d/nspawn.conf

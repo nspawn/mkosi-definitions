@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+systemctl enable rabbitmq-server
+# The management plugin, without starting Erlang during the build.
+printf '[rabbitmq_management].\n' > /etc/rabbitmq/enabled_plugins
