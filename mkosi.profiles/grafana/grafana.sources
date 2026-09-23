@@ -1,0 +1,5 @@
+Types: deb
+URIs: https://apt.grafana.com
+Suites: stable
+Components: main
+Signed-By: /usr/share/keyrings/grafana.gpg

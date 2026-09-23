@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+systemctl enable named
+# Recursion for the private networks (the nspawn bridge among them) on every address;
+# Debian's default only recurses for the machine's own subnets. Zones go in named.conf.local.
+printf '%s\n' 'options {' \
+    '        directory "/var/cache/bind";' \
+    '        listen-on { any; };' \
+    '        listen-on-v6 { any; };' \
+    '        allow-recursion { 127.0.0.0/8; 10.0.0.0/8; 172.16.0.0/12; 192.168.0.0/16; ::1/128; fc00::/7; };' \
+    '        dnssec-validation auto;' \
+    '};' > /etc/bind/named.conf.options
+# A DNS server owns port 53: systemd-resolved must not run its stub listener, and the
+# machine's own lookups go to the upstream servers resolved learned from the bridge.
+mkdir -p /etc/systemd/resolved.conf.d
+printf '[Resolve]\nDNSStubListener=no\n' > /etc/systemd/resolved.conf.d/nspawn.conf
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
