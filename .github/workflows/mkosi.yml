@@ -56,7 +56,7 @@ jobs:
           else
             changed=$(git diff --name-only "$BASE" HEAD)
             echo "changed files:"; echo "$changed" | sed 's/^/  /'
-            images=$(printf '%s\n' "$changed" | ./.github/select-images.py)
+            images=$(printf '%s\n' "$changed" | ./.github/select-images.py --base "$BASE")
           fi
           count=$(printf '%s' "$images" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))')
           printf '%s\n' "$images" | python3 -c 'import json,sys; [print("  " + i["repo"] + ":" + i["release"]) for i in json.load(sys.stdin)]'

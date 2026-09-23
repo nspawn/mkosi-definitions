@@ -146,8 +146,10 @@ Edit the packages or the `mkosi.postinst.chroot` of the distribution and open a 
 request: the workflow builds the images your change affects, and keeps the package
 manifest of each as an artifact, without pushing anything. A profile means the images
 built with it, a distribution means the images of that distribution (its services
-included), and the shared configuration means all of them; `.github/select-images.py`
-decides, and the `select` job of the run prints the list. Once merged to `master` the
+included), an entry added to or edited in `images.json` means that image, and the shared
+configuration means all of them. Prose and the files under `.github/` build nothing, so a
+change to how the workflow builds (the mkosi version, for one) asks for a manual run.
+`.github/select-images.py` decides, and the `select` job of the run prints the list. Once merged to `master` the
 same images are built again and pushed to the hub. The weekly run on Sunday rebuilds
 everything, which is what picks up package updates.
 
