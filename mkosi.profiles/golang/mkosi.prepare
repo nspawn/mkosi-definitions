@@ -1,0 +1,24 @@
+#!/bin/bash
+# The current Go release from go.dev, verified against the sha256 of its release index,
+# unpacked into /usr/local/go. The version goes to /usr/share/golang/VERSION for the tags.
+set -euo pipefail
+[ "${1:-}" = final ] || exit 0
+
+read -r version file sha < <(curl -sSfL 'https://go.dev/dl/?mode=json' | python3 -c '
+import json, sys
+release = json.load(sys.stdin)[0]
+archive = next(f for f in release["files"]
+               if f["os"] == "linux" and f["arch"] == "amd64" and f["kind"] == "archive")
+print(release["version"].removeprefix("go"), archive["filename"], archive["sha256"])
+')
+tmp=$(mktemp -d)
+curl -sSfL -o "$tmp/$file" "https://go.dev/dl/$file"
+echo "$sha  $tmp/$file" | sha256sum -c -
+tar -C "$BUILDROOT/usr/local" -xzf "$tmp/$file"
+rm -rf "$tmp"
+install -d "$BUILDROOT/usr/share/golang"
+echo "$version" > "$BUILDROOT/usr/share/golang/VERSION"
+install -D -m 644 /dev/stdin "$BUILDROOT/etc/profile.d/golang.sh" <<'EOF'
+export PATH=$PATH:/usr/local/go/bin:/root/go/bin
+EOF
+echo "installed go $version"

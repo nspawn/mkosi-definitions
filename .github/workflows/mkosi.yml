@@ -81,6 +81,17 @@ jobs:
           - { distro: debian, release: trixie, profile: grafana,    repo: grafana,    versionof: grafana }
           - { distro: debian, release: trixie, profile: wordpress,  repo: wordpress,  versionof: wordpress }
           - { distro: debian, release: trixie, profile: syncthing,  repo: syncthing,  versionof: syncthing }
+          # Toolboxes and language machines: a profile again, tagged like their
+          # distribution or with the toolchain the build installed.
+          - { distro: debian, release: trixie,   profile: devel, repo: debian-devel,    tags: 13 trixie latest }
+          - { distro: ubuntu, release: resolute, profile: devel, repo: ubuntu-devel,    tags: 26.04 resolute latest }
+          - { distro: fedora, release: "44",     profile: devel, repo: fedora-devel,    tags: 44 latest }
+          - { distro: arch,   release: rolling,  profile: devel, repo: archlinux-devel, tags: rolling latest }
+          - { distro: debian, release: trixie, profile: python,  repo: python,  versionof: python3 }
+          - { distro: debian, release: trixie, profile: openjdk, repo: openjdk, versionof: openjdk-21-jdk }
+          - { distro: debian, release: trixie, profile: nodejs,  repo: nodejs,  versionof: nodejs }
+          - { distro: debian, release: trixie, profile: golang,  repo: golang,  versionfile: usr/share/golang/VERSION }
+          - { distro: debian, release: trixie, profile: rust,    repo: rust,    versionfile: usr/share/rust/VERSION }
           # No Debian package: the build writes the version it installed into the image.
           - { distro: debian, release: trixie, profile: forgejo,    repo: forgejo,    versionfile: usr/share/forgejo/VERSION }
 

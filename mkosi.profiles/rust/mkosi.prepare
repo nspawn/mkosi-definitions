@@ -1,0 +1,27 @@
+#!/bin/bash
+# The current stable Rust, installed with rustup under /usr/local, as Rust's own container
+# image lays it out. rustup-init is checked against the sha256 published next to it on
+# static.rust-lang.org (no detached signature is published for it). The toolchain version
+# goes to /usr/share/rust/VERSION for the tags.
+set -euo pipefail
+[ "${1:-}" = final ] || exit 0
+
+base=https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu
+tmp=$(mktemp -d)
+curl -sSfL -o "$tmp/rustup-init" "$base/rustup-init"
+curl -sSfL -o "$tmp/rustup-init.sha256" "$base/rustup-init.sha256"
+# The published file names the artifact by its path; check the digest alone.
+echo "$(cut -d' ' -f1 "$tmp/rustup-init.sha256")  $tmp/rustup-init" | sha256sum -c -
+chmod +x "$tmp/rustup-init"
+
+export RUSTUP_HOME="$BUILDROOT/usr/local/rustup" CARGO_HOME="$BUILDROOT/usr/local/cargo"
+"$tmp/rustup-init" -y --no-modify-path --profile minimal --default-toolchain stable
+rm -rf "$tmp"
+version=$("$CARGO_HOME/bin/rustc" --version | cut -d' ' -f2)
+install -d "$BUILDROOT/usr/share/rust"
+echo "$version" > "$BUILDROOT/usr/share/rust/VERSION"
+install -D -m 644 /dev/stdin "$BUILDROOT/etc/profile.d/rust.sh" <<'EOF'
+export RUSTUP_HOME=/usr/local/rustup CARGO_HOME=/usr/local/cargo
+export PATH=$PATH:/usr/local/cargo/bin
+EOF
+echo "installed rust $version"
