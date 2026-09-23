@@ -28,6 +28,7 @@ Debian ships (`nginx:1.26.3`, `nginx:1.26`, `nginx:latest`):
 | `postgresql` | `postgresql` (17) | port 5432, `/var/lib/postgresql`, `/etc/postgresql` | `mkosi.profiles/postgresql/` |
 | `mariadb` | `mariadb-server` | port 3306, `/var/lib/mysql`, `/etc/mysql` | `mkosi.profiles/mariadb/` |
 | `valkey` | `valkey-server` | port 6379, `/var/lib/valkey`, `/etc/valkey` | `mkosi.profiles/valkey/` |
+| `redis` | `redis-server` | port 6379, `/var/lib/redis`, `/etc/redis` | `mkosi.profiles/redis/` |
 | `memcached` | `memcached` | port 11211, `/etc/memcached.conf` | `mkosi.profiles/memcached/` |
 | `rabbitmq` | `rabbitmq-server` | ports 5672 and 15672 (management), `/var/lib/rabbitmq`, `/etc/rabbitmq` | `mkosi.profiles/rabbitmq/` |
 | `mosquitto` | `mosquitto` | port 1883, `/etc/mosquitto` | `mkosi.profiles/mosquitto/` |
