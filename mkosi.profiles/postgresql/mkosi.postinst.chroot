@@ -1,3 +1,10 @@
 #!/bin/sh
-# Debian enables most services on installation; make sure of it.
+set -e
 systemctl enable postgresql
+# Listen on every address and take password logins from the network; Debian's default
+# is localhost only. Set a password first: nspawn shell, then su postgres -c psql and
+# ALTER USER postgres PASSWORD '...'.
+for main in /etc/postgresql/*/main; do
+    printf "listen_addresses = '*'\n" > "$main/conf.d/nspawn.conf"
+    printf 'host all all 0.0.0.0/0 scram-sha-256\nhost all all ::/0 scram-sha-256\n' >> "$main/pg_hba.conf"
+done

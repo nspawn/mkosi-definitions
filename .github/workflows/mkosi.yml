@@ -67,6 +67,12 @@ jobs:
           - { distro: debian, release: trixie, profile: postgresql, repo: postgresql, versionof: postgresql-17 }
           - { distro: debian, release: trixie, profile: mariadb,    repo: mariadb,    versionof: mariadb-server }
           - { distro: debian, release: trixie, profile: valkey,     repo: valkey,     versionof: valkey-server }
+          - { distro: debian, release: trixie, profile: memcached,  repo: memcached,  versionof: memcached }
+          - { distro: debian, release: trixie, profile: rabbitmq,   repo: rabbitmq,   versionof: rabbitmq-server }
+          - { distro: debian, release: trixie, profile: mosquitto,  repo: mosquitto,  versionof: mosquitto }
+          - { distro: debian, release: trixie, profile: haproxy,    repo: haproxy,    versionof: haproxy }
+          - { distro: debian, release: trixie, profile: unbound,    repo: unbound,    versionof: unbound }
+          - { distro: debian, release: trixie, profile: dnsmasq,    repo: dnsmasq,    versionof: dnsmasq }
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

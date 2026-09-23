@@ -28,11 +28,27 @@ Debian ships (`nginx:1.26.3`, `nginx:1.26`, `nginx:latest`):
 | `postgresql` | `postgresql` (17) | port 5432, `/var/lib/postgresql`, `/etc/postgresql` | `mkosi.profiles/postgresql/` |
 | `mariadb` | `mariadb-server` | port 3306, `/var/lib/mysql`, `/etc/mysql` | `mkosi.profiles/mariadb/` |
 | `valkey` | `valkey-server` | port 6379, `/var/lib/valkey`, `/etc/valkey` | `mkosi.profiles/valkey/` |
+| `memcached` | `memcached` | port 11211, `/etc/memcached.conf` | `mkosi.profiles/memcached/` |
+| `rabbitmq` | `rabbitmq-server` | ports 5672 and 15672 (management), `/var/lib/rabbitmq`, `/etc/rabbitmq` | `mkosi.profiles/rabbitmq/` |
+| `mosquitto` | `mosquitto` | port 1883, `/etc/mosquitto` | `mkosi.profiles/mosquitto/` |
+| `haproxy` | `haproxy` | whatever `/etc/haproxy/haproxy.cfg` says | `mkosi.profiles/haproxy/` |
+| `unbound` | `unbound` | port 53, `/etc/unbound/unbound.conf.d` | `mkosi.profiles/unbound/` |
+| `dnsmasq` | `dnsmasq` | port 53, `/etc/dnsmasq.d` | `mkosi.profiles/dnsmasq/` |
 
 They are full Debian machines with the service installed and enabled: `nspawn shell`
 gets a root shell, `systemctl status nginx` inside says what it is doing, the paths above
 are what to mount with `-v` to keep data and configuration on the host, and `-p` publishes
 the port. Security updates come from Debian; the weekly rebuild picks them up.
+
+Where Debian's default is to listen on localhost only, the images listen on every address
+of the machine instead, as container images do: the machine is the boundary, and nothing
+reaches it unless a port is published. Authentication stays as Debian ships it, so set a
+password before publishing a port to the outside: PostgreSQL takes password logins from
+the network once `ALTER USER postgres PASSWORD '...'` has run, MariaDB's root logs in
+through the socket and network users are created from there, Valkey has no password until
+`requirepass` is set, Mosquitto allows anonymous clients until a password file is added,
+RabbitMQ's guest account works from localhost only. The DNS images (unbound, dnsmasq) turn
+off systemd-resolved's stub listener so that they own port 53.
 
 Every build also gets a dated tag (`fedora:44-20260922`) to go back to: the first build of
 a day owns that tag, a later one the same day moves the other tags but leaves it alone, so a
