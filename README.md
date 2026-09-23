@@ -34,6 +34,12 @@ Debian ships (`nginx:1.26.3`, `nginx:1.26`, `nginx:latest`):
 | `haproxy` | `haproxy` | whatever `/etc/haproxy/haproxy.cfg` says | `mkosi.profiles/haproxy/` |
 | `unbound` | `unbound` | port 53, `/etc/unbound/unbound.conf.d` | `mkosi.profiles/unbound/` |
 | `dnsmasq` | `dnsmasq` | port 53, `/etc/dnsmasq.d` | `mkosi.profiles/dnsmasq/` |
+| `bind9` | `bind9` | port 53, `/etc/bind` | `mkosi.profiles/bind9/` |
+| `samba` | `samba` | port 445, share `data` on `/srv/samba/data`, `/etc/samba/smb.conf` | `mkosi.profiles/samba/` |
+| `openssh` | `openssh-server` | port 22, `/root/.ssh/authorized_keys` | `mkosi.profiles/openssh/` |
+| `prometheus` | `prometheus` | port 9090, `/var/lib/prometheus`, `/etc/prometheus` | `mkosi.profiles/prometheus/` |
+| `node-exporter` | `prometheus-node-exporter` | port 9100 | `mkosi.profiles/node-exporter/` |
+| `grafana` | `grafana` (Grafana Labs' repository) | port 3000, `/var/lib/grafana`, `/etc/grafana` | `mkosi.profiles/grafana/` |
 
 They are full Debian machines with the service installed and enabled: `nspawn shell`
 gets a root shell, `systemctl status nginx` inside says what it is doing, the paths above
@@ -47,8 +53,11 @@ password before publishing a port to the outside: PostgreSQL takes password logi
 the network once `ALTER USER postgres PASSWORD '...'` has run, MariaDB's root logs in
 through the socket and network users are created from there, Valkey has no password until
 `requirepass` is set, Mosquitto allows anonymous clients until a password file is added,
-RabbitMQ's guest account works from localhost only. The DNS images (unbound, dnsmasq) turn
-off systemd-resolved's stub listener so that they own port 53.
+RabbitMQ's guest account works from localhost only, Grafana starts with admin/admin, Samba's
+`data` share is open to guests, and the OpenSSH image only lets root in with a key (mount
+your `authorized_keys` at `/root/.ssh/authorized_keys`) and makes its host keys on the first
+boot, so machines do not share them. The DNS images (unbound, dnsmasq, bind9) turn off
+systemd-resolved's stub listener so that they own port 53.
 
 Every build also gets a dated tag (`fedora:44-20260922`) to go back to: the first build of
 a day owns that tag, a later one the same day moves the other tags but leaves it alone, so a

@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+systemctl enable ssh ssh-hostkeys
+# Every machine gets its own host keys on first boot (ssh-hostkeys.service).
+rm -f /etc/ssh/ssh_host_*
+# Root logs in with a key only, sshd's default; the file to mount from the host.
+mkdir -m 700 -p /root/.ssh

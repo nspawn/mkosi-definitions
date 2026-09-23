@@ -73,6 +73,12 @@ jobs:
           - { distro: debian, release: trixie, profile: haproxy,    repo: haproxy,    versionof: haproxy }
           - { distro: debian, release: trixie, profile: unbound,    repo: unbound,    versionof: unbound }
           - { distro: debian, release: trixie, profile: dnsmasq,    repo: dnsmasq,    versionof: dnsmasq }
+          - { distro: debian, release: trixie, profile: bind9,      repo: bind9,      versionof: bind9 }
+          - { distro: debian, release: trixie, profile: samba,      repo: samba,      versionof: samba }
+          - { distro: debian, release: trixie, profile: openssh,    repo: openssh,    versionof: openssh-server }
+          - { distro: debian, release: trixie, profile: prometheus, repo: prometheus, versionof: prometheus }
+          - { distro: debian, release: trixie, profile: node-exporter, repo: node-exporter, versionof: prometheus-node-exporter }
+          - { distro: debian, release: trixie, profile: grafana,    repo: grafana,    versionof: grafana }
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
