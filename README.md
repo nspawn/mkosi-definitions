@@ -130,24 +130,32 @@ or push it to any registry `nspawn pull` can reach.
 
 ```text
 mkosi.conf                 output format, annotations and what every image shares
+images.json                the images the hub publishes: distribution, release, profile, tags
 mkosi.conf.d/<distro>/     [Match] Distribution=..., default release, packages, postinst
 mkosi.profiles/disk/       the bootable disk variant (kernel per distribution)
 mkosi.profiles/<service>/  a service on the Debian image: its packages, its units, its text
 mkosi.repart/              partitions of the disk variant
 mkosi.bump                 the image version: the build date
-.github/workflows/mkosi.yml   the matrix, one job per image
+.github/select-images.py   which of them a change affects
+.github/workflows/mkosi.yml   one job per image to build
 ```
 
 ## Changing an image
 
 Edit the packages or the `mkosi.postinst.chroot` of the distribution and open a pull
-request: the workflow builds every image of the matrix and keeps the package manifest of
-each as an artifact, without pushing anything. Once merged to `master` the same workflow
-builds again and pushes to the hub; it also runs every Sunday to pick up package updates.
+request: the workflow builds the images your change affects, and keeps the package
+manifest of each as an artifact, without pushing anything. A profile means the images
+built with it, a distribution means the images of that distribution (its services
+included), an entry added to or edited in `images.json` means that image, and the shared
+configuration means all of them. Prose and the files under `.github/` build nothing, so a
+change to how the workflow builds (the mkosi version, for one) asks for a manual run.
+`.github/select-images.py` decides, and the `select` job of the run prints the list. Once merged to `master` the
+same images are built again and pushed to the hub. The weekly run on Sunday rebuilds
+everything, which is what picks up package updates.
 
 To add a service, add a profile under `mkosi.profiles/` (packages, a `mkosi.postinst.chroot`
-that enables the units, the image id and the text) and a matrix entry with the package
-whose version becomes the tag. Something that Debian does not package, like Forgejo, is
+that enables the units, the image id and the text) and an entry in `images.json` with the
+package whose version becomes the tag. Something that Debian does not package, like Forgejo, is
 installed by a `mkosi.prepare` script, the one mkosi runs with network access, that verifies
 what it downloads and writes the version it installed into the image, to a file the matrix
 entry names with `versionfile`.
