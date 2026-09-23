@@ -64,6 +64,27 @@ your `authorized_keys` at `/root/.ssh/authorized_keys`) and makes its host keys 
 boot, so machines do not share them. The DNS images (unbound, dnsmasq, bind9) turn off
 systemd-resolved's stub listener so that they own port 53.
 
+Machines to work in: a toolbox per distribution, and one per language on Debian, all with
+compilers, git and the usual tools. Mount your sources with `-v ~/src:/root/src` and they
+stay a machine you come back to, not a build step.
+
+| Image | Tags | Brings | Definition |
+| --- | --- | --- | --- |
+| `debian-devel` | `13`, `trixie`, `latest` | build-essential, gdb, cmake, git, tmux | `mkosi.profiles/devel/` |
+| `ubuntu-devel` | `26.04`, `resolute`, `latest` | the same on Ubuntu | `mkosi.profiles/devel/` |
+| `fedora-devel` | `44`, `latest` | gcc, gdb, cmake, git, tmux | `mkosi.profiles/devel/` |
+| `archlinux-devel` | `rolling`, `latest` | base-devel, gdb, cmake, git, tmux | `mkosi.profiles/devel/` |
+| `python` | the interpreter's version | Debian's Python with pip and venv | `mkosi.profiles/python/` |
+| `nodejs` | the runtime's version | Node.js 24 from NodeSource, with npm | `mkosi.profiles/nodejs/` |
+| `golang` | the toolchain's version | the current Go from go.dev in `/usr/local/go` | `mkosi.profiles/golang/` |
+| `rust` | the toolchain's version | the current stable through rustup, under `/usr/local` | `mkosi.profiles/rust/` |
+| `openjdk` | the JDK's version | Debian's OpenJDK 21 with Maven | `mkosi.profiles/openjdk/` |
+
+Node.js, Go and Rust come from upstream because Debian's are one or more releases behind;
+each build verifies what it downloads (the NodeSource repository is signed, go.dev
+publishes the sha256 of its archives, rustup's is next to the installer) and `apt upgrade`,
+`rustup update` and the like keep working inside the machine.
+
 Every build also gets a dated tag (`fedora:44-20260922`) to go back to: the first build of
 a day owns that tag, a later one the same day moves the other tags but leaves it alone, so a
 dated tag always names the same image. The hub keeps the last ten per repository. The images boot
