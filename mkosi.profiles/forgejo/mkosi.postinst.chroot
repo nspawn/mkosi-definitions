@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+# The layout of Forgejo's own installation guide.
+useradd --system --create-home --home-dir /var/lib/forgejo --shell /bin/bash --comment 'Forgejo' git
+chmod 750 /var/lib/forgejo
+mkdir -p /etc/forgejo
+chown root:git /etc/forgejo
+# 770 until the installer at / has written app.ini; tighten to 750 afterwards.
+chmod 770 /etc/forgejo
+systemctl enable forgejo

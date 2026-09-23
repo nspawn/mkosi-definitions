@@ -1,0 +1,21 @@
+#!/bin/bash
+# The prepare script is the one mkosi runs with network access. Fetch the current Forgejo
+# release, verify it with the release key kept in this repository, install it and
+# record the version in the image for the hub's tags. Only in the final phase (the script also runs
+# for the build overlay, which this image does not use).
+set -euo pipefail
+[ "${1:-}" = final ] || exit 0
+api=https://codeberg.org/api/v1/repos/forgejo/forgejo/releases/latest
+version=$(curl -sSfL "$api" | python3 -c 'import json, sys; print(json.load(sys.stdin)["tag_name"].lstrip("v"))')
+base="https://codeberg.org/forgejo/forgejo/releases/download/v$version"
+tmp=$(mktemp -d)
+curl -sSfL -o "$tmp/forgejo" "$base/forgejo-$version-linux-amd64"
+curl -sSfL -o "$tmp/forgejo.asc" "$base/forgejo-$version-linux-amd64.asc"
+# The key from this repository (extra trees reach the image only after this script).
+gpgv --keyring "$SRCDIR/mkosi.profiles/forgejo/forgejo.gpg" "$tmp/forgejo.asc" "$tmp/forgejo"
+install -D -m 755 "$tmp/forgejo" "$BUILDROOT/usr/local/bin/forgejo"
+rm -rf "$tmp"
+# The hub's tags come from this file (the workflow reads it out of the image layer).
+install -d "$BUILDROOT/usr/share/forgejo"
+echo "$version" > "$BUILDROOT/usr/share/forgejo/VERSION"
+echo "installed forgejo $version"

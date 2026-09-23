@@ -79,6 +79,10 @@ jobs:
           - { distro: debian, release: trixie, profile: prometheus, repo: prometheus, versionof: prometheus }
           - { distro: debian, release: trixie, profile: node-exporter, repo: node-exporter, versionof: prometheus-node-exporter }
           - { distro: debian, release: trixie, profile: grafana,    repo: grafana,    versionof: grafana }
+          - { distro: debian, release: trixie, profile: wordpress,  repo: wordpress,  versionof: wordpress }
+          - { distro: debian, release: trixie, profile: syncthing,  repo: syncthing,  versionof: syncthing }
+          # No Debian package: the build writes the version it installed into the image.
+          - { distro: debian, release: trixie, profile: forgejo,    repo: forgejo,    versionfile: usr/share/forgejo/VERSION }
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -128,6 +132,19 @@ jobs:
           print(re.split(r"[+~]", version)[0])        # no +dfsg or ~rc suffix
           EOF
             )
+            tags="$version ${version%.*} latest"
+          elif [ -n "${{ matrix.versionfile }}" ]; then
+            # A file inside the image, read out of its single layer.
+            sudo apt-get install -y -q --no-install-recommends zstd >/dev/null
+            layer=$(python3 - "$LAYOUT" <<'EOF'
+          import json, sys
+          layout = sys.argv[1]
+          manifest = json.load(open(layout + "/index.json"))["manifests"][0]["digest"].split(":")[1]
+          print(json.load(open(f"{layout}/blobs/sha256/{manifest}"))["layers"][0]["digest"].split(":")[1])
+          EOF
+            )
+            # mkosi stores the members as ./usr/...
+            version=$(zstd -dc "$LAYOUT/blobs/sha256/$layer" | tar -xO './${{ matrix.versionfile }}')
             tags="$version ${version%.*} latest"
           else
             tags="${{ matrix.tags }}"

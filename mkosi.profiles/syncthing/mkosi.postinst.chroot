@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+# A user of its own; its device keys are made on the first start, so no two machines share them.
+useradd --system --create-home --home-dir /var/lib/syncthing --shell /usr/sbin/nologin syncthing
+mkdir -p /etc/systemd/system/syncthing@syncthing.service.d
+# Debian's default GUI address is localhost only.
+printf '[Service]\nEnvironment=STGUIADDRESS=0.0.0.0:8384\n' > /etc/systemd/system/syncthing@syncthing.service.d/nspawn.conf
+systemctl enable syncthing@syncthing
