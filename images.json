@@ -158,6 +158,13 @@
   {
     "distro": "debian",
     "release": "trixie",
+    "profile": "redis",
+    "repo": "redis",
+    "versionof": "redis-server"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
     "profile": "memcached",
     "repo": "memcached",
     "versionof": "memcached"
