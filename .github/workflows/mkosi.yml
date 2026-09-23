@@ -11,6 +11,8 @@ on:
       - mkosi.profiles/**
       - mkosi.repart/**
       - mkosi.bump
+      - images.json
+      - .github/select-images.py
       - .github/workflows/mkosi.yml
   pull_request:
     paths:
@@ -19,6 +21,8 @@ on:
       - mkosi.profiles/**
       - mkosi.repart/**
       - mkosi.bump
+      - images.json
+      - .github/select-images.py
       - .github/workflows/mkosi.yml
   schedule:
     - cron: '0 3 * * 0'
@@ -28,7 +32,45 @@ permissions:
   contents: read
 
 jobs:
+  # What changed decides what is built: a pull request or a push builds the images its
+  # files affect, the weekly run and a manual one build them all (see select-images.py).
+  select:
+    runs-on: ubuntu-24.04
+    outputs:
+      images: ${{ steps.select.outputs.images }}
+      count: ${{ steps.select.outputs.count }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - id: select
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ "${{ github.event_name }}" = schedule ] || [ "${{ github.event_name }}" = workflow_dispatch ] \
+             || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            images=$(cat images.json)
+            echo "building every image"
+          else
+            changed=$(git diff --name-only "$BASE" HEAD)
+            echo "changed files:"; echo "$changed" | sed 's/^/  /'
+            images=$(printf '%s\n' "$changed" | ./.github/select-images.py)
+          fi
+          count=$(printf '%s' "$images" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))')
+          printf '%s\n' "$images" | python3 -c 'import json,sys; [print("  " + i["repo"] + ":" + i["release"]) for i in json.load(sys.stdin)]'
+          echo "$count image(s) to build"
+          {
+            echo "images<<EOF"
+            printf '%s\n' "$images"
+            echo "EOF"
+            echo "count=$count"
+          } >> "$GITHUB_OUTPUT"
+
   image:
+    needs: select
+    if: needs.select.outputs.count != '0'
     name: ${{ matrix.repo }}:${{ matrix.release }}
     runs-on: ubuntu-24.04
     concurrency:
@@ -37,63 +79,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # distro and release are what mkosi takes; repo and tags are what the hub shows.
-          # The first tag is the canonical one and also gets a dated variant (44-20260922).
-          - { distro: arch,     release: rolling,      repo: archlinux,  tags: rolling latest }
-          - { distro: debian,   release: trixie,       repo: debian,     tags: 13 trixie latest }
-          - { distro: debian,   release: bookworm,     repo: debian,     tags: 12 bookworm }
-          - { distro: debian,   release: sid,          repo: debian,     tags: sid unstable }
-          - { distro: ubuntu,   release: resolute,     repo: ubuntu,     tags: 26.04 resolute latest }
-          - { distro: ubuntu,   release: noble,        repo: ubuntu,     tags: 24.04 noble }
-          - { distro: ubuntu,   release: jammy,        repo: ubuntu,     tags: 22.04 jammy }
-          - { distro: fedora,   release: "44",         repo: fedora,     tags: 44 latest }
-          - { distro: fedora,   release: "43",         repo: fedora,     tags: "43" }
-          - { distro: fedora,   release: rawhide,      repo: fedora,     tags: rawhide }
-          - { distro: centos,   release: "10",         repo: centos,     tags: 10 latest }
-          - { distro: centos,   release: "9",          repo: centos,     tags: "9" }
-          - { distro: alma,     release: "10",         repo: almalinux,  tags: 10 latest }
-          - { distro: alma,     release: "9",          repo: almalinux,  tags: "9" }
-          - { distro: rocky,    release: "10",         repo: rockylinux, tags: 10 latest }
-          - { distro: rocky,    release: "9",          repo: rockylinux, tags: "9" }
-          - { distro: opensuse, release: tumbleweed,   repo: opensuse,   tags: tumbleweed latest }
-          - { distro: opensuse, release: "16.0",       repo: opensuse,   tags: 16.0 leap }
-          - { distro: kali,     release: kali-rolling, repo: kali,       tags: rolling latest }
-          # Services: a profile on the Debian image, tagged with the version of the package
-          # named in versionof (read from mkosi's manifest): 1.26.3, 1.26 and latest.
-          - { distro: debian, release: trixie, profile: nginx,      repo: nginx,      versionof: nginx }
-          - { distro: debian, release: trixie, profile: apache,     repo: apache,     versionof: apache2 }
-          - { distro: debian, release: trixie, profile: caddy,      repo: caddy,      versionof: caddy }
-          - { distro: debian, release: trixie, profile: postgresql, repo: postgresql, versionof: postgresql-17 }
-          - { distro: debian, release: trixie, profile: mariadb,    repo: mariadb,    versionof: mariadb-server }
-          - { distro: debian, release: trixie, profile: valkey,     repo: valkey,     versionof: valkey-server }
-          - { distro: debian, release: trixie, profile: memcached,  repo: memcached,  versionof: memcached }
-          - { distro: debian, release: trixie, profile: rabbitmq,   repo: rabbitmq,   versionof: rabbitmq-server }
-          - { distro: debian, release: trixie, profile: mosquitto,  repo: mosquitto,  versionof: mosquitto }
-          - { distro: debian, release: trixie, profile: haproxy,    repo: haproxy,    versionof: haproxy }
-          - { distro: debian, release: trixie, profile: unbound,    repo: unbound,    versionof: unbound }
-          - { distro: debian, release: trixie, profile: dnsmasq,    repo: dnsmasq,    versionof: dnsmasq }
-          - { distro: debian, release: trixie, profile: bind9,      repo: bind9,      versionof: bind9 }
-          - { distro: debian, release: trixie, profile: samba,      repo: samba,      versionof: samba }
-          - { distro: debian, release: trixie, profile: openssh,    repo: openssh,    versionof: openssh-server }
-          - { distro: debian, release: trixie, profile: prometheus, repo: prometheus, versionof: prometheus }
-          - { distro: debian, release: trixie, profile: node-exporter, repo: node-exporter, versionof: prometheus-node-exporter }
-          - { distro: debian, release: trixie, profile: grafana,    repo: grafana,    versionof: grafana }
-          - { distro: debian, release: trixie, profile: wordpress,  repo: wordpress,  versionof: wordpress }
-          - { distro: debian, release: trixie, profile: syncthing,  repo: syncthing,  versionof: syncthing }
-          # Toolboxes and language machines: a profile again, tagged like their
-          # distribution or with the toolchain the build installed.
-          - { distro: debian, release: trixie,   profile: devel, repo: debian-devel,    tags: 13 trixie latest }
-          - { distro: ubuntu, release: resolute, profile: devel, repo: ubuntu-devel,    tags: 26.04 resolute latest }
-          - { distro: fedora, release: "44",     profile: devel, repo: fedora-devel,    tags: 44 latest }
-          - { distro: arch,   release: rolling,  profile: devel, repo: archlinux-devel, tags: rolling latest }
-          - { distro: debian, release: trixie, profile: python,  repo: python,  versionof: python3 }
-          - { distro: debian, release: trixie, profile: openjdk, repo: openjdk, versionof: openjdk-21-jdk }
-          - { distro: debian, release: trixie, profile: nodejs,  repo: nodejs,  versionof: nodejs }
-          - { distro: debian, release: trixie, profile: golang,  repo: golang,  versionfile: usr/share/golang/VERSION }
-          - { distro: debian, release: trixie, profile: rust,    repo: rust,    versionfile: usr/share/rust/VERSION }
-          # No Debian package: the build writes the version it installed into the image.
-          - { distro: debian, release: trixie, profile: forgejo,    repo: forgejo,    versionfile: usr/share/forgejo/VERSION }
+        include: ${{ fromJSON(needs.select.outputs.images) }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

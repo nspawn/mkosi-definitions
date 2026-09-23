@@ -1,0 +1,326 @@
+[
+  {
+    "distro": "arch",
+    "release": "rolling",
+    "repo": "archlinux",
+    "tags": "rolling latest"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "repo": "debian",
+    "tags": "13 trixie latest"
+  },
+  {
+    "distro": "debian",
+    "release": "bookworm",
+    "repo": "debian",
+    "tags": "12 bookworm"
+  },
+  {
+    "distro": "debian",
+    "release": "sid",
+    "repo": "debian",
+    "tags": "sid unstable"
+  },
+  {
+    "distro": "ubuntu",
+    "release": "resolute",
+    "repo": "ubuntu",
+    "tags": "26.04 resolute latest"
+  },
+  {
+    "distro": "ubuntu",
+    "release": "noble",
+    "repo": "ubuntu",
+    "tags": "24.04 noble"
+  },
+  {
+    "distro": "ubuntu",
+    "release": "jammy",
+    "repo": "ubuntu",
+    "tags": "22.04 jammy"
+  },
+  {
+    "distro": "fedora",
+    "release": "44",
+    "repo": "fedora",
+    "tags": "44 latest"
+  },
+  {
+    "distro": "fedora",
+    "release": "43",
+    "repo": "fedora",
+    "tags": "43"
+  },
+  {
+    "distro": "fedora",
+    "release": "rawhide",
+    "repo": "fedora",
+    "tags": "rawhide"
+  },
+  {
+    "distro": "centos",
+    "release": "10",
+    "repo": "centos",
+    "tags": "10 latest"
+  },
+  {
+    "distro": "centos",
+    "release": "9",
+    "repo": "centos",
+    "tags": "9"
+  },
+  {
+    "distro": "alma",
+    "release": "10",
+    "repo": "almalinux",
+    "tags": "10 latest"
+  },
+  {
+    "distro": "alma",
+    "release": "9",
+    "repo": "almalinux",
+    "tags": "9"
+  },
+  {
+    "distro": "rocky",
+    "release": "10",
+    "repo": "rockylinux",
+    "tags": "10 latest"
+  },
+  {
+    "distro": "rocky",
+    "release": "9",
+    "repo": "rockylinux",
+    "tags": "9"
+  },
+  {
+    "distro": "opensuse",
+    "release": "tumbleweed",
+    "repo": "opensuse",
+    "tags": "tumbleweed latest"
+  },
+  {
+    "distro": "opensuse",
+    "release": "16.0",
+    "repo": "opensuse",
+    "tags": "16.0 leap"
+  },
+  {
+    "distro": "kali",
+    "release": "kali-rolling",
+    "repo": "kali",
+    "tags": "rolling latest"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "nginx",
+    "repo": "nginx",
+    "versionof": "nginx"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "apache",
+    "repo": "apache",
+    "versionof": "apache2"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "caddy",
+    "repo": "caddy",
+    "versionof": "caddy"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "postgresql",
+    "repo": "postgresql",
+    "versionof": "postgresql-17"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "mariadb",
+    "repo": "mariadb",
+    "versionof": "mariadb-server"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "valkey",
+    "repo": "valkey",
+    "versionof": "valkey-server"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "memcached",
+    "repo": "memcached",
+    "versionof": "memcached"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "rabbitmq",
+    "repo": "rabbitmq",
+    "versionof": "rabbitmq-server"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "mosquitto",
+    "repo": "mosquitto",
+    "versionof": "mosquitto"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "haproxy",
+    "repo": "haproxy",
+    "versionof": "haproxy"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "unbound",
+    "repo": "unbound",
+    "versionof": "unbound"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "dnsmasq",
+    "repo": "dnsmasq",
+    "versionof": "dnsmasq"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "bind9",
+    "repo": "bind9",
+    "versionof": "bind9"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "samba",
+    "repo": "samba",
+    "versionof": "samba"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "openssh",
+    "repo": "openssh",
+    "versionof": "openssh-server"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "prometheus",
+    "repo": "prometheus",
+    "versionof": "prometheus"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "node-exporter",
+    "repo": "node-exporter",
+    "versionof": "prometheus-node-exporter"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "grafana",
+    "repo": "grafana",
+    "versionof": "grafana"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "wordpress",
+    "repo": "wordpress",
+    "versionof": "wordpress"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "syncthing",
+    "repo": "syncthing",
+    "versionof": "syncthing"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "devel",
+    "repo": "debian-devel",
+    "tags": "13 trixie latest"
+  },
+  {
+    "distro": "ubuntu",
+    "release": "resolute",
+    "profile": "devel",
+    "repo": "ubuntu-devel",
+    "tags": "26.04 resolute latest"
+  },
+  {
+    "distro": "fedora",
+    "release": "44",
+    "profile": "devel",
+    "repo": "fedora-devel",
+    "tags": "44 latest"
+  },
+  {
+    "distro": "arch",
+    "release": "rolling",
+    "profile": "devel",
+    "repo": "archlinux-devel",
+    "tags": "rolling latest"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "python",
+    "repo": "python",
+    "versionof": "python3"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "openjdk",
+    "repo": "openjdk",
+    "versionof": "openjdk-21-jdk"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "nodejs",
+    "repo": "nodejs",
+    "versionof": "nodejs"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "golang",
+    "repo": "golang",
+    "versionfile": "usr/share/golang/VERSION"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "rust",
+    "repo": "rust",
+    "versionfile": "usr/share/rust/VERSION"
+  },
+  {
+    "distro": "debian",
+    "release": "trixie",
+    "profile": "forgejo",
+    "repo": "forgejo",
+    "versionfile": "usr/share/forgejo/VERSION"
+  }
+]
