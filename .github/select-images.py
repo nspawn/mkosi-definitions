@@ -9,7 +9,7 @@ Reads the paths on standard input, one per line, and writes the matrix as JSON.
                                   the commit to compare against)
     anything else under mkosi.    every image (the shared configuration, mkosi.bump)
     .github/, README, LICENSE,    nothing: no image is built from them. A change to how
-    mkosi.repart/                 the workflow builds (the mkosi version, for one) asks
+    cosign.pub, mkosi.repart/     the workflow builds (the mkosi version, for one) asks
                                   for a manual run, which builds everything.
 """
 
@@ -23,9 +23,10 @@ from pathlib import Path
 IMAGES = Path("images.json")
 CONF_D = Path("mkosi.conf.d")
 PROFILES = Path("mkosi.profiles")
-# Files no image is built from: prose, and the partitions of the disk variant, which the
+# Files no image is built from: prose, the public key the images are verified with (the
+# workflow signs with the private one) and the partitions of the disk variant, which the
 # hub does not publish.
-IGNORED = {Path("README.md"), Path("LICENSE"), Path(".gitignore")}
+IGNORED = {Path("README.md"), Path("LICENSE"), Path(".gitignore"), Path("cosign.pub")}
 IGNORED_DIRS = (Path("mkosi.repart"), Path(".github"))
 
 

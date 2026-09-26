@@ -113,6 +113,13 @@ cosign verify \
   hub.nspawn.org/fedora:44
 ```
 
+Each image carries a second signature, made with the project's key, whose public half is
+`cosign.pub` in this repository: the hub's registry (zot) only verifies signatures against
+public keys uploaded to it, and this is what makes it show the images as signed. It
+verifies with `cosign verify --key cosign.pub hub.nspawn.org/fedora:44`. The keyless one
+is the stronger claim, since it names the workflow that built the image rather than a key
+that anyone able to run the workflow can use.
+
 Images pushed by hand to the hub are not signed by this, and `nspawn pull` does not verify
 signatures yet.
 
@@ -156,6 +163,7 @@ mkosi.profiles/disk/       the bootable disk variant (kernel per distribution)
 mkosi.profiles/<service>/  a service on the Debian image: its packages, its units, its text
 mkosi.repart/              partitions of the disk variant
 mkosi.bump                 the image version: the build date
+cosign.pub                 the public half of the key the images are also signed with
 .github/select-images.py   which of them a change affects
 .github/workflows/mkosi.yml   one job per image to build
 ```

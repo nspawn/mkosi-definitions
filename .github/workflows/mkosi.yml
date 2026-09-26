@@ -208,36 +208,47 @@ jobs:
           fi
           skopeo logout hub.nspawn.org
 
-      # Keyless: no key to keep. GitHub's OIDC token names this workflow on this branch,
-      # Fulcio turns that into a short-lived certificate, the signature goes into the Rekor
-      # transparency log and, as an OCI referrer, next to the image on the hub (cosign 3's
-      # default; the old sha256-<digest>.sig tag would be swept by the hub's tag
-      # retention). One signature per digest covers every tag that points to it. cosign
-      # reads Docker's credentials file, not the one skopeo login writes.
+      # Two signatures per digest, each covering every tag that points to it, stored as OCI
+      # referrers next to the image (cosign 3's default; the old sha256-<digest>.sig tag
+      # would be swept by the hub's tag retention). Keyless first: GitHub's OIDC token names
+      # this workflow on this branch, Fulcio turns that into a short-lived certificate and
+      # the signature goes into the Rekor transparency log; that is what people verify
+      # against. Then one with the project's key (cosign.pub in the repository): the hub's
+      # zot only verifies against public keys uploaded to it, so this is what makes it show
+      # the image as signed. cosign reads Docker's credentials file, not the one skopeo
+      # login writes.
       - name: Sign
         if: github.event_name != 'pull_request'
         env:
           HUB_USER: ${{ secrets.HUB_USER }}
           HUB_PASSWORD: ${{ secrets.HUB_PASSWORD }}
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
         run: |
           set -- $TAGS
           digest=$(skopeo inspect --format '{{.Digest}}' "docker://hub.nspawn.org/${{ matrix.repo }}:$1")
           echo "DIGEST=$digest" >> "$GITHUB_ENV"
           printf '%s' "$HUB_PASSWORD" | cosign login hub.nspawn.org -u "$HUB_USER" --password-stdin
-          for attempt in 1 2 3 4 5; do
-            cosign sign --yes "hub.nspawn.org/${{ matrix.repo }}@$digest" && break
-            [ "$attempt" = 5 ] && exit 1
-            echo "signing failed (attempt $attempt of 5); retrying in 30 seconds"
-            sleep 30
-          done
+          sign() {
+            for attempt in 1 2 3 4 5; do
+              cosign sign --yes "$@" "hub.nspawn.org/${{ matrix.repo }}@$digest" && return 0
+              echo "signing failed (attempt $attempt of 5); retrying in 30 seconds"
+              sleep 30
+            done
+            return 1
+          }
+          sign
+          sign --key env://COSIGN_PRIVATE_KEY
           docker logout hub.nspawn.org
 
-      # What anyone can run against a pulled image (see the README); here it proves the
-      # signature landed and names the identity that verifies it.
-      - name: Verify the signature
+      # What anyone can run against a pulled image (see the README); here it proves both
+      # signatures landed: the keyless one names the identity that verifies it, the other
+      # verifies with the public key in the repository.
+      - name: Verify the signatures
         if: github.event_name != 'pull_request'
         run: |
           cosign verify \
             --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/mkosi.yml@${{ github.ref }}" \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com \
             "hub.nspawn.org/${{ matrix.repo }}@$DIGEST" > /dev/null
+          cosign verify --key cosign.pub "hub.nspawn.org/${{ matrix.repo }}@$DIGEST" > /dev/null
