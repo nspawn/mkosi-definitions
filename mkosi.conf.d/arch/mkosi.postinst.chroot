@@ -1,10 +1,21 @@
 #!/bin/sh
+set -e
 # make sure systemd-networkd and systemd-resolved are running
 systemctl enable systemd-networkd
 systemctl enable systemd-resolved
 # make sure we symlink /run/systemd/resolve/stub-resolv.conf to /etc/resolv.conf
 # otherwise curl will fail
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+# pacman-mirrorlist ships every mirror commented out, which leaves pacman with no server
+# to talk to. The geo mirror is what the official container image uses.
+echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' > /etc/pacman.d/mirrorlist
+# mkosi verifies packages with a pacman keyring it keeps in its sandbox, not in the image,
+# and archlinux-keyring only populates a keyring that already exists. Make the image's own
+# and load the Arch Linux keys, or every install inside the machine fails with "required
+# key missing from keyring". pacman-key leaves a gpg-agent behind that nothing reaps.
+pacman-key --init
+pacman-key --populate archlinux
+gpgconf --homedir /etc/pacman.d/gnupg --kill all
 # Add pts/[0-4] to /etc/securetty to allow logins via `machinectl login`
 {
   echo "pts/0"
