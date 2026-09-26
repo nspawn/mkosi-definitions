@@ -1,5 +1,5 @@
-# Build every image of the matrix with mkosi and, on master, push it to hub.nspawn.org.
-# Pull requests only build. The weekly run picks up package updates.
+# Build every image of the matrix with mkosi and, on master, push it to hub.nspawn.org and
+# sign it. Pull requests only build. The weekly run picks up package updates.
 name: mkosi
 
 on:
@@ -27,13 +27,19 @@ on:
   schedule:
     - cron: '0 3 * * 0'
   workflow_dispatch:
+    inputs:
+      images:
+        description: 'Only these images, as repo:release separated by spaces (empty: all of them)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
 
 jobs:
   # What changed decides what is built: a pull request or a push builds the images its
-  # files affect, the weekly run and a manual one build them all (see select-images.py).
+  # files affect, the weekly run and a manual one build them all (see select-images.py),
+  # unless the manual one names the images it wants.
   select:
     runs-on: ubuntu-24.04
     outputs:
@@ -48,8 +54,18 @@ jobs:
       - id: select
         env:
           BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          ONLY: ${{ inputs.images }}
         run: |
-          if [ "${{ github.event_name }}" = schedule ] || [ "${{ github.event_name }}" = workflow_dispatch ] \
+          if [ "${{ github.event_name }}" = workflow_dispatch ] && [ -n "$ONLY" ]; then
+            images=$(python3 -c 'import json, os, sys
+          only = os.environ["ONLY"].split()
+          images = [i for i in json.load(open("images.json")) if i["repo"] + ":" + i["release"] in only]
+          missing = set(only) - {i["repo"] + ":" + i["release"] for i in images}
+          if missing:
+              sys.exit("not in images.json: " + " ".join(sorted(missing)))
+          print(json.dumps(images))')
+            echo "building the images asked for"
+          elif [ "${{ github.event_name }}" = schedule ] || [ "${{ github.event_name }}" = workflow_dispatch ] \
              || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
             images=$(cat images.json)
             echo "building every image"
@@ -73,6 +89,10 @@ jobs:
     if: needs.select.outputs.count != '0'
     name: ${{ matrix.repo }}:${{ matrix.release }}
     runs-on: ubuntu-24.04
+    # id-token: the OIDC token that identifies this workflow to Sigstore, for the signature.
+    permissions:
+      contents: read
+      id-token: write
     concurrency:
       group: ${{ github.workflow }}-${{ matrix.repo }}-${{ matrix.release }}-${{ github.ref }}
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -87,6 +107,9 @@ jobs:
           persist-credentials: false
 
       - uses: systemd/mkosi@4736cd836108a97772142c461c49f1ddb4172348 # v27
+
+      - if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
 
       - name: Configure
         run: |
@@ -184,3 +207,37 @@ jobs:
             push "$dated"
           fi
           skopeo logout hub.nspawn.org
+
+      # Keyless: no key to keep. GitHub's OIDC token names this workflow on this branch,
+      # Fulcio turns that into a short-lived certificate, the signature goes into the Rekor
+      # transparency log and, as an OCI referrer, next to the image on the hub (cosign 3's
+      # default; the old sha256-<digest>.sig tag would be swept by the hub's tag
+      # retention). One signature per digest covers every tag that points to it. cosign
+      # reads Docker's credentials file, not the one skopeo login writes.
+      - name: Sign
+        if: github.event_name != 'pull_request'
+        env:
+          HUB_USER: ${{ secrets.HUB_USER }}
+          HUB_PASSWORD: ${{ secrets.HUB_PASSWORD }}
+        run: |
+          set -- $TAGS
+          digest=$(skopeo inspect --format '{{.Digest}}' "docker://hub.nspawn.org/${{ matrix.repo }}:$1")
+          echo "DIGEST=$digest" >> "$GITHUB_ENV"
+          printf '%s' "$HUB_PASSWORD" | cosign login hub.nspawn.org -u "$HUB_USER" --password-stdin
+          for attempt in 1 2 3 4 5; do
+            cosign sign --yes "hub.nspawn.org/${{ matrix.repo }}@$digest" && break
+            [ "$attempt" = 5 ] && exit 1
+            echo "signing failed (attempt $attempt of 5); retrying in 30 seconds"
+            sleep 30
+          done
+          docker logout hub.nspawn.org
+
+      # What anyone can run against a pulled image (see the README); here it proves the
+      # signature landed and names the identity that verifies it.
+      - name: Verify the signature
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign verify \
+            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/mkosi.yml@${{ github.ref }}" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            "hub.nspawn.org/${{ matrix.repo }}@$DIGEST" > /dev/null

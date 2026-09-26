@@ -97,6 +97,25 @@ sudo nspawn pull fedora:44
 sudo nspawn start fedora-44
 ```
 
+## Signatures
+
+Every image the workflow pushes is signed with [cosign](https://github.com/sigstore/cosign)
+in keyless mode: no key exists to keep or to leak. GitHub's OIDC token identifies the
+workflow run, Fulcio issues a short-lived certificate for that identity, the signature is
+recorded in the Rekor transparency log and stored on the hub next to the image, as an OCI
+referrer of its digest, so it covers every tag that points to that digest. What to trust is
+therefore the identity of this workflow on `master`:
+
+```shell
+cosign verify \
+  --certificate-identity https://github.com/nspawn/mkosi-definitions/.github/workflows/mkosi.yml@refs/heads/master \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  hub.nspawn.org/fedora:44
+```
+
+Images pushed by hand to the hub are not signed by this, and `nspawn pull` does not verify
+signatures yet.
+
 ## Building locally
 
 mkosi 27 or newer. The tools tree (`ToolsTree=default`) brings the package managers, so
@@ -151,8 +170,13 @@ included), an entry added to or edited in `images.json` means that image, and th
 configuration means all of them. Prose and the files under `.github/` build nothing, so a
 change to how the workflow builds (the mkosi version, for one) asks for a manual run.
 `.github/select-images.py` decides, and the `select` job of the run prints the list. Once merged to `master` the
-same images are built again and pushed to the hub. The weekly run on Sunday rebuilds
-everything, which is what picks up package updates.
+same images are built again, pushed to the hub and signed. The weekly run on Sunday rebuilds
+everything, which is what picks up package updates. A manual run builds everything too,
+unless given the images it should build (`repo:release`, separated by spaces):
+
+```shell
+gh workflow run mkosi.yml -f images="kali:kali-rolling fedora:44"
+```
 
 To add a service, add a profile under `mkosi.profiles/` (packages, a `mkosi.postinst.chroot`
 that enables the units, the image id and the text) and an entry in `images.json` with the
