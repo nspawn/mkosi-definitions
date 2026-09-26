@@ -1,5 +1,6 @@
 # Build every image of the matrix with mkosi and, on master, push it to hub.nspawn.org and
-# sign it. Pull requests only build. The weekly run picks up package updates.
+# sign it. Pull requests and manual runs on other branches only build. The weekly run picks
+# up package updates.
 name: mkosi
 
 on:
@@ -108,7 +109,7 @@ jobs:
 
       - uses: systemd/mkosi@4736cd836108a97772142c461c49f1ddb4172348 # v27
 
-      - if: github.event_name != 'pull_request'
+      - if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
 
       - name: Configure
@@ -179,8 +180,11 @@ jobs:
           path: mkosi.output/*.manifest
           if-no-files-found: warn
 
+      # Only master publishes: a pull request never does, and neither does a manual run on
+      # another branch, which builds and stops. What it signs is therefore always what the
+      # identity in the README names.
       - name: Push to the hub
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         env:
           HUB_USER: ${{ secrets.HUB_USER }}
           HUB_PASSWORD: ${{ secrets.HUB_PASSWORD }}
@@ -218,7 +222,7 @@ jobs:
       # the image as signed. cosign reads Docker's credentials file, not the one skopeo
       # login writes.
       - name: Sign
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         env:
           HUB_USER: ${{ secrets.HUB_USER }}
           HUB_PASSWORD: ${{ secrets.HUB_PASSWORD }}
@@ -245,7 +249,7 @@ jobs:
       # signatures landed: the keyless one names the identity that verifies it, the other
       # verifies with the public key in the repository.
       - name: Verify the signatures
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         run: |
           cosign verify \
             --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/mkosi.yml@${{ github.ref }}" \
