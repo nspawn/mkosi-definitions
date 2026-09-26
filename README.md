@@ -3,7 +3,7 @@
 The [mkosi](https://github.com/systemd/mkosi) definitions of the images on
 [hub.nspawn.org](https://hub.nspawn.org/), the registry that
 [nspawn](https://github.com/nspawn/nspawn) pulls from. One OCI image per distribution,
-built by GitHub Actions from this repository and pushed to the hub.
+built by GitHub Actions from this repository, signed and pushed to the hub.
 
 | Image | Tags | Definition |
 | --- | --- | --- |
@@ -120,8 +120,20 @@ verifies with `cosign verify --key cosign.pub hub.nspawn.org/fedora:44`. The key
 is the stronger claim, since it names the workflow that built the image rather than a key
 that anyone able to run the workflow can use.
 
-Images pushed by hand to the hub are not signed by this, and `nspawn pull` does not verify
-signatures yet.
+[nspawn](https://github.com/nspawn/nspawn) 1.5.0 and later verify one of the two before
+downloading anything: `cosign.pub` and the identity above are built into it, so a pull
+from the hub needs no configuration, `pull` says who signed the image, and an image without
+a valid signature is refused unless `--no-verify` is given (see [Signed
+images](https://github.com/nspawn/nspawn/blob/master/docs/USAGE.md#signed-images) in its
+usage documentation). Two things follow for this repository:
+
+- Images pushed to the hub by hand are not signed by this workflow, so nspawn refuses
+  them unless pulled with `--no-verify`.
+- The key and the identity are what nspawn trusts, and the identity is the path of the
+  workflow file on `master`. Since either signature satisfies it, the key can be rotated,
+  or the workflow moved, one at a time without breaking pulls with the nspawn already
+  installed; changing both before a matching nspawn release would stop every pull from
+  the hub.
 
 ## Building locally
 
