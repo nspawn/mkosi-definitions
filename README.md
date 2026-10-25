@@ -91,6 +91,8 @@ a day owns that tag, a later one the same day moves the other tags but leaves it
 dated tag always names the same image. The hub keeps the last ten per repository. The images boot
 systemd, log in as `root` with password `root` on the console, and carry systemd-networkd
 and systemd-resolved, which is how they get their address and DNS on the nspawn bridge.
+The Arch Linux images make their pacman keyring on the first boot, so that machines do not
+share its master key.
 
 ```shell
 sudo nspawn pull fedora:44

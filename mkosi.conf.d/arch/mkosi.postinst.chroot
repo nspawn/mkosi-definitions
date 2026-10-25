@@ -10,12 +10,11 @@ ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 # to talk to. The geo mirror is what the official container image uses.
 echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' > /etc/pacman.d/mirrorlist
 # mkosi verifies packages with a pacman keyring it keeps in its sandbox, not in the image,
-# and archlinux-keyring only populates a keyring that already exists. Make the image's own
-# and load the Arch Linux keys, or every install inside the machine fails with "required
-# key missing from keyring". pacman-key leaves a gpg-agent behind that nothing reaps.
-pacman-key --init
-pacman-key --populate archlinux
-gpgconf --homedir /etc/pacman.d/gnupg --kill all
+# and the image ships none either: pacman-key --init makes a local master key, private
+# half included, and every machine pulled from the image would share it, so anyone with
+# the image could certify a key that all of those machines trust. pacman-init.service
+# makes each machine's own keyring on its first boot instead.
+rm -rf /etc/pacman.d/gnupg
 # Add pts/[0-4] to /etc/securetty to allow logins via `machinectl login`
 {
   echo "pts/0"
