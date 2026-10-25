@@ -1,0 +1,16 @@
+# The pacman keyring, made on the first boot of every machine: a local master key of its
+# own, then the Arch Linux keys loaded and signed with it, without which every install
+# fails with "required key missing from keyring". The image ships no keyring, so that two
+# machines pulled from it do not share the master key.
+[Unit]
+Description=Initialize the pacman keyring
+Before=multi-user.target archlinux-keyring-wkd-sync.service
+ConditionPathExists=!/etc/pacman.d/gnupg
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman-key --init
+ExecStart=/usr/bin/pacman-key --populate archlinux
+
+[Install]
+WantedBy=multi-user.target

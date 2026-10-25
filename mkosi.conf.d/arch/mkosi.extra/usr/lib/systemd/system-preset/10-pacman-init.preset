@@ -1,0 +1,3 @@
+# mkosi applies the presets after mkosi.postinst.chroot, and Arch's disable every unit no
+# preset names, so a `systemctl enable` there would not last.
+enable pacman-init.service
