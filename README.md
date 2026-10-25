@@ -165,7 +165,12 @@ Test the result with nspawn on the same machine:
 skopeo copy oci:mkosi.output/fedora_20260922_x86-64 docker://localhost:5000/fedora:test
 ```
 
-or push it to any registry `nspawn pull` can reach.
+or push it to any registry `nspawn pull` can reach. The check the workflow runs on every
+image boots it as a machine and needs only systemd-nspawn (systemd-container) and zstd:
+
+```shell
+sudo .github/boot-check.sh mkosi.output/fedora_20260922_x86-64
+```
 
 ## Layout
 
@@ -179,14 +184,17 @@ mkosi.repart/              partitions of the disk variant
 mkosi.bump                 the image version: the build date
 cosign.pub                 the public half of the key the images are also signed with
 .github/select-images.py   which of them a change affects
+.github/boot-check.sh      boots a built image as a machine and checks that it comes up
 .github/workflows/mkosi.yml   one job per image to build
 ```
 
 ## Changing an image
 
 Edit the packages or the `mkosi.postinst.chroot` of the distribution and open a pull
-request: the workflow builds the images your change affects, and keeps the package
-manifest of each as an artifact, without pushing anything. A profile means the images
+request: the workflow builds the images your change affects, keeps the package manifest
+of each as an artifact and boots each one as a machine, without pushing anything. An
+image passes when systemd reaches `running` with no failed unit and the machine runs a
+command over its D-Bus; one that does not is never pushed, on `master` either. A profile means the images
 built with it, a distribution means the images of that distribution (its services
 included), an entry added to or edited in `images.json` means that image, and the shared
 configuration means all of them. Prose and the files under `.github/` build nothing, so a

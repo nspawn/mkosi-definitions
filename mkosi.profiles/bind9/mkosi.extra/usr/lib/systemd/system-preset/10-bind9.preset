@@ -1,0 +1,6 @@
+# named-resolvconf.service would make named the machine's resolver through resolvconf,
+# which systemd-resolved only emulates, and it fails there; the machine's own lookups go
+# to the servers resolved learned from the bridge instead (mkosi.postinst.chroot). Debian
+# ships the unit disabled, but has no preset that disables what none names, so mkosi's
+# presets would enable it.
+disable named-resolvconf.service

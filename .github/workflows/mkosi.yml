@@ -180,6 +180,15 @@ jobs:
           path: mkosi.output/*.manifest
           if-no-files-found: warn
 
+      # A machine from the image has to boot: systemd running with no failed unit and its
+      # D-Bus answering, which is what nspawn start and nspawn shell need. It comes after
+      # the manifest, which helps to find out why, and before the push: an image that does
+      # not boot is not pushed, and the hub keeps the last one that did.
+      - name: Boot it as a machine
+        run: |
+          sudo apt-get install -y -q --no-install-recommends systemd-container zstd >/dev/null
+          sudo .github/boot-check.sh "$LAYOUT"
+
       # Only master publishes: a pull request never does, and neither does a manual run on
       # another branch, which builds and stops. What it signs is therefore always what the
       # identity in the README names.
