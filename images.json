@@ -43,9 +43,15 @@
   },
   {
     "distro": "fedora",
+    "release": "45",
+    "repo": "fedora",
+    "tags": "45 latest"
+  },
+  {
+    "distro": "fedora",
     "release": "44",
     "repo": "fedora",
-    "tags": "44 latest"
+    "tags": "44"
   },
   {
     "distro": "fedora",
@@ -276,10 +282,10 @@
   },
   {
     "distro": "fedora",
-    "release": "44",
+    "release": "45",
     "profile": "devel",
     "repo": "fedora-devel",
-    "tags": "44 latest"
+    "tags": "45 latest"
   },
   {
     "distro": "arch",
