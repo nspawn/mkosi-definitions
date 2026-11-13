@@ -186,6 +186,7 @@ mkosi.bump                 the image version: the build date
 cosign.pub                 the public half of the key the images are also signed with
 .github/select-images.py   which of them a change affects
 .github/boot-check.sh      boots a built image as a machine and checks that it comes up
+                           and that its shells get login sessions
 .github/workflows/mkosi.yml   one job per image to build
 ```
 
@@ -194,8 +195,10 @@ cosign.pub                 the public half of the key the images are also signed
 Edit the packages or the `mkosi.postinst.chroot` of the distribution and open a pull
 request: the workflow builds the images your change affects, keeps the package manifest
 of each as an artifact and boots each one as a machine, without pushing anything. An
-image passes when systemd reaches `running` with no failed unit and the machine runs a
-command over its D-Bus; one that does not is never pushed, on `master` either. A profile means the images
+image passes when systemd reaches `running` with no failed unit, the machine runs a
+command over its D-Bus, and a shell opened as `nspawn shell` opens one, as root and as a
+new user, gets a login session with the user's own systemd; one that does not is never
+pushed, on `master` either. A profile means the images
 built with it, a distribution means the images of that distribution (its services
 included), an entry added to or edited in `images.json` means that image, and the shared
 configuration means all of them. Prose and the files under `.github/` build nothing, so a

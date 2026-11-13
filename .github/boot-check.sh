@@ -1,6 +1,7 @@
 #!/bin/sh
 # Boot a built image as a machine and check that it comes up: systemd reaches "running"
-# with no failed unit, and the machine answers on its D-Bus, which nspawn shell needs.
+# with no failed unit, the machine answers on its D-Bus, which nspawn shell needs, and a
+# shell, as root or as a user, gets a login session.
 # Runs as root, on the OCI layout mkosi wrote:
 #
 #   sudo .github/boot-check.sh mkosi.output/fedora_20260922_x86-64
@@ -101,3 +102,35 @@ fi
 # command for it.
 systemd-run -M "$machine" --quiet --wait /usr/bin/true || fail "the machine runs no command"
 echo "$machine: boots, and runs commands"
+
+# What a shell from nspawn shell gets: machined opens it through the machine's PAM login
+# stack, where pam_systemd gives it a logind session, a runtime directory and the user's
+# own systemd, whose D-Bus is the session bus. Checked as root and as a user the image's
+# own useradd makes. Newer systemd starts the shell's output with terminal sequences that
+# mark the session, so only the verdict line is read.
+# shellcheck disable=SC2016 # it expands in the machine's shell
+probe='
+missing=
+[ -n "${XDG_SESSION_ID:-}" ] || missing="$missing logind-session"
+[ -n "${XDG_RUNTIME_DIR:-}" ] || missing="$missing runtime-directory"
+[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] || missing="$missing session-bus"
+manager=$(systemctl --user is-system-running --wait 2>&1 | head -n 1)
+[ "$manager" = running ] || missing="$missing user-manager"
+echo "session ${XDG_SESSION_ID:-none}, runtime directory ${XDG_RUNTIME_DIR:-none}"
+echo "user manager: $manager"
+echo "missing:${missing:- nothing}"
+'
+systemd-run -M "$machine" --quiet --wait /bin/sh -c 'useradd -m boot-check' ||
+	fail "useradd made no user"
+for user in root boot-check; do
+	out=$(timeout 120 machinectl shell -q "$user@$machine" /bin/sh -c "$probe" </dev/null 2>&1 |
+		tr -d '\r' || true)
+	missing=$(printf '%s\n' "$out" | sed -n 's/.*missing: //p' | tail -n 1)
+	[ "$missing" = nothing ] && continue
+	printf '%s\n' "$out" >&2
+	# Why a shell did not open, or its user's systemd did not start, is in the journal.
+	systemd-run -M "$machine" --quiet --wait --pipe journalctl -b --no-pager -n 30 >&2 || true
+	[ -n "$missing" ] || fail "no shell opened as $user"
+	fail "a shell as $user lacks: $missing"
+done
+echo "$machine: shells get login sessions"
