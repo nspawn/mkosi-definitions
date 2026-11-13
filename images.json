@@ -114,6 +114,12 @@
     "tags": "16.0 leap"
   },
   {
+    "distro": "azure",
+    "release": "4.0",
+    "repo": "azurelinux",
+    "tags": "4.0-beta"
+  },
+  {
     "distro": "kali",
     "release": "kali-rolling",
     "repo": "kali",

@@ -16,6 +16,7 @@ built by GitHub Actions from this repository, signed and pushed to the hub.
 | `rockylinux` | `10`, `latest`; `9` | `mkosi.conf.d/el/` plus `el-rocky.conf` |
 | `opensuse` | `tumbleweed`, `latest`; `16.0`, `leap` | `mkosi.conf.d/opensuse/` |
 | `kali` | `rolling`, `latest` | `mkosi.conf.d/kali/` |
+| `azurelinux` | `4.0-beta` | `mkosi.conf.d/azure/` |
 
 Services, each a profile on the Debian image, tagged with the version of the package
 Debian ships (`nginx:1.26.3`, `nginx:1.26`, `nginx:latest`):
