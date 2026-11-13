@@ -181,9 +181,10 @@ jobs:
           if-no-files-found: warn
 
       # A machine from the image has to boot: systemd running with no failed unit and its
-      # D-Bus answering, which is what nspawn start and nspawn shell need. It comes after
-      # the manifest, which helps to find out why, and before the push: an image that does
-      # not boot is not pushed, and the hub keeps the last one that did.
+      # D-Bus answering, which is what nspawn start and nspawn shell need, and a shell in it
+      # getting a login session, as root and as a user. It comes after the manifest, which
+      # helps to find out why, and before the push: an image that does not boot is not
+      # pushed, and the hub keeps the last one that did.
       - name: Boot it as a machine
         run: |
           sudo apt-get install -y -q --no-install-recommends systemd-container zstd >/dev/null
