@@ -10,7 +10,7 @@ built by GitHub Actions from this repository, signed and pushed to the hub.
 | `archlinux` | `rolling`, `latest` | `mkosi.conf.d/arch/` |
 | `debian` | `13`, `trixie`, `latest`; `12`, `bookworm`; `sid`, `unstable` | `mkosi.conf.d/debian/` |
 | `ubuntu` | `26.04`, `resolute`, `latest`; `24.04`, `noble`; `22.04`, `jammy` | `mkosi.conf.d/ubuntu/` |
-| `fedora` | `44`, `latest`; `43`; `rawhide` | `mkosi.conf.d/fedora/` |
+| `fedora` | `45`, `latest`; `44`; `43`; `rawhide` | `mkosi.conf.d/fedora/` |
 | `centos` | `10`, `latest`; `9` | `mkosi.conf.d/el/` plus `el-centos.conf` |
 | `almalinux` | `10`, `latest`; `9` | `mkosi.conf.d/el/` plus `el-alma.conf` |
 | `rockylinux` | `10`, `latest`; `9` | `mkosi.conf.d/el/` plus `el-rocky.conf` |
@@ -73,7 +73,7 @@ stay a machine you come back to, not a build step.
 | --- | --- | --- | --- |
 | `debian-devel` | `13`, `trixie`, `latest` | build-essential, gdb, cmake, git, tmux | `mkosi.profiles/devel/` |
 | `ubuntu-devel` | `26.04`, `resolute`, `latest` | the same on Ubuntu | `mkosi.profiles/devel/` |
-| `fedora-devel` | `44`, `latest` | gcc, gdb, cmake, git, tmux | `mkosi.profiles/devel/` |
+| `fedora-devel` | `45`, `latest` | gcc, gdb, cmake, git, tmux | `mkosi.profiles/devel/` |
 | `archlinux-devel` | `rolling`, `latest` | base-devel, gdb, cmake, git, tmux | `mkosi.profiles/devel/` |
 | `python` | the interpreter's version | Debian's Python with pip and venv | `mkosi.profiles/python/` |
 | `nodejs` | the runtime's version | Node.js 24 from NodeSource, with npm | `mkosi.profiles/nodejs/` |
